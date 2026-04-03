@@ -373,7 +373,7 @@
             <section class="section" id="stats">
                 <div class="stats-container">
                     <div class="stat-item">
-                        <h2 class="stat-number" data-target="0">0</h2>
+                        <h2 class="stat-number" data-target="4">0</h2>
                         <p>Projects Completed</p>
                     </div>
                     <div class="stat-item">
@@ -549,9 +549,74 @@
         })();
     </script>
 
+    <!-- Project Modal Popup -->
+    <div class="project-modal" id="projectModal">
+        <div class="project-modal-content">
+            <button class="project-modal-close" onclick="closeProjectModal()">&times;</button>
+            <div class="project-modal-icon">
+                <i class="uil uil-briefcase"></i>
+            </div>
+            <h3 id="modalProjectTitle">Project Title</h3>
+            <p id="modalProjectDescription">Project description goes here</p>
+            <div class="project-modal-status">
+                <strong>Status:</strong> Development in progress - Coming soon!
+            </div>
+        </div>
+    </div>
+
     <!-- ----- MAIN JS ----- -->
-    <script src="./portfolio.js"></script>
-   
+    <script src="./portfolio.js?v=2.2"></script>
+    
+    <!-- DIRECT PROJECT INJECTION -->
+    <script>
+        // Modal functions
+        function openProjectModal(title, description) {
+            document.getElementById('modalProjectTitle').textContent = title;
+            document.getElementById('modalProjectDescription').textContent = description;
+            document.getElementById('projectModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProjectModal() {
+            document.getElementById('projectModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        window.addEventListener('load', () => {
+            const container = document.querySelector('#projects .project-container');
+            if (container) {
+                container.innerHTML = `
+                    <a href="https://rmedu.cleverapps.io" target="_blank" class="project-box" data-category="web">
+                        <i class="uil uil-folder"></i>
+                        <h3>LMS with AI Integration</h3>
+                        <label>AI-Integrated learning management system for student education and progress tracking.</label>
+                    </a>
+                    <a href="#" onclick="event.preventDefault(); openProjectModal('Advanced Doctor Appointment & HMS', 'Hospital Management System with AI integration for doctor appointments and patient records.')" class="project-box" data-category="web">
+                        <i class="uil uil-folder"></i>
+                        <h3>Advanced Doctor Appointment & HMS</h3>
+                        <label>Hospital Management System with AI integration for doctor appointments and patient records.</label>
+                    </a>
+                    <a href="https://rupam.co.in" target="_blank" class="project-box" data-category="web">
+                        <i class="uil uil-folder"></i>
+                        <h3>Personal Portfolio</h3>
+                        <label>Premium personal portfolio website with interactive 3D effects and animations.</label>
+                    </a>
+                    <a href="#" onclick="event.preventDefault(); openProjectModal('Spotify Website', 'High-fidelity UI clone of Spotify music streaming platform.')" class="project-box" data-category="design">
+                        <i class="uil uil-folder"></i>
+                        <h3>Spotify Website</h3>
+                        <label>High-fidelity UI clone of Spotify music streaming platform.</label>
+                    </a>
+                `;
+                
+                // Close modal when clicking outside
+                document.getElementById('projectModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'projectModal') {
+                        closeProjectModal();
+                    }
+                });
+            }
+        });
+    </script>
    
 </body>
 

@@ -244,47 +244,82 @@ window.addEventListener('load', function () {
 
 /* ----- FETCH PROJECTS FROM DB ----- */
 async function loadProjects() {
-    try {
-        const response = await fetch('/api/projects');
-        const projects = await response.json();
-        const container = document.querySelector('.project-container');
+    const fallbackProjects = [
+        { title: "LMS with AI Integration", description: "AI-Integrated learning management system for student education and progress tracking.", category: "web", link: "https://rmedu.cleverapps.io" },
+        { title: "Advanced Doctor Appointment & HMS", description: "Hospital Management System with AI integration for doctor appointments and patient records.", category: "web", link: "#" },
+        { title: "Personal Portfolio", description: "Premium personal portfolio website with interactive 3D effects and animations.", category: "web", link: "https://rupam.co.in" },
+        { title: "Spotify Website", description: "High-fidelity UI clone of Spotify music streaming platform.", category: "design", link: "#" }
+    ];
 
-        // Only if we actually have projects in DB, otherwise keep static ones
+    const container = document.querySelector('#projects .project-container');
+    if (!container) return;
+
+    const projectCountStat = document.querySelector('.stat-item:nth-child(1) .stat-number');
+
+    try {
+        let projects = [];
+        
+        // Try fetching from API
+        try {
+            const response = await fetch('/api/projects');
+            if (response.ok) {
+                projects = await response.json();
+            }
+        } catch (e) {
+            console.log("API unavailable, using fallback projects");
+            projects = fallbackProjects;
+        }
+
+        // If empty, use fallback
+        if (!projects || projects.length === 0) {
+            projects = fallbackProjects;
+        }
+
+        // Render projects
         if (projects.length > 0) {
-            container.innerHTML = ''; // Clear static ones
+            container.innerHTML = '';
             projects.forEach(project => {
                 const projectDiv = document.createElement('a');
                 projectDiv.classList.add('project-box');
-                projectDiv.setAttribute('data-tilt', ''); // Add tilt effect
+                projectDiv.setAttribute('data-tilt', ''); 
+                
+                const category = project.category || 'web';
+                projectDiv.setAttribute('data-category', category);
                 projectDiv.href = project.link || '#';
                 projectDiv.target = '_blank';
-
-                // Add categories for filtering (assuming DB could return tags or we infer)
-                // Defaulting to "web" for demo if not present
-                const category = project.category || 'web';
-                // We add a hidden text span or data attribute for our filter logic to find
 
                 projectDiv.innerHTML = `
                     <i class="uil uil-folder"></i>
                     <h3>${project.title}</h3>
                     <label>${project.description || 'View Project'}</label>
-                    <span style="display:none;">${category}</span> 
                 `;
                 container.appendChild(projectDiv);
             });
-            // Re-init Tilt for new elements
-            if (typeof VanillaTilt !== 'undefined') {
-                VanillaTilt.init(document.querySelectorAll(".project-box"), {
-                    max: 25,
-                    speed: 400
-                });
+            
+            // ScrollReveal animation
+            if (typeof ScrollReveal !== 'undefined') {
+                ScrollReveal().reveal('.project-box', { interval: 200 });
+            }
+
+            // Update project counter
+            if (projectCountStat) {
+                const count = projects.length;
+                projectCountStat.setAttribute('data-target', count);
+                projectCountStat.textContent = count;
+                projectCountStat.classList.remove('animated');
             }
         }
     } catch (err) {
-        console.log("Using static projects (DB might be empty or offline)");
+        console.error("Error loading projects:", err);
     }
 }
-loadProjects();
+
+// Load projects when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadProjects);
+} else {
+    loadProjects();
+}
 
 
 /* ----- VANILLA TILT INIT ----- */
@@ -305,13 +340,15 @@ filterBtns.forEach(btn => {
         const projectBoxes = document.querySelectorAll('.project-box');
 
         projectBoxes.forEach(box => {
-            // Check if box has the category
             const text = box.innerText.toLowerCase();
-            let category = 'all';
-
-            if (text.includes('react') || text.includes('node') || text.includes('web') || text.includes('appointment')) category = 'web';
-            if (text.includes('app') || text.includes('mobile')) category = 'app';
-            if (text.includes('design') || text.includes('ui/ux') || text.includes('clone') || text.includes('netflix')) category = 'design';
+            let category = box.getAttribute('data-category') || 'all';
+            
+            // Fallback to keyword matching only if no explicit category
+            if (category === 'all') {
+                if (text.includes('react') || text.includes('node') || text.includes('web') || text.includes('appointment')) category = 'web';
+                if (text.includes('app') || text.includes('mobile')) category = 'app';
+                if (text.includes('design') || text.includes('ui/ux') || text.includes('clone') || text.includes('netflix')) category = 'design';
+            }
 
             if (filterValue === 'all' || category === filterValue || (filterValue === 'web' && text.includes('portfolio'))) {
                 box.style.display = 'flex';
