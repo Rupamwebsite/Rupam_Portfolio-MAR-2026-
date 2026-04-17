@@ -1,0 +1,26 @@
+[
+  {
+    "title": "LMS with AI Integration",
+    "description": "AI-Integrated learning management system for student education and progress tracking.",
+    "link": "https://rmedu.cleverapps.io",
+    "category": "web"
+  },
+  {
+    "title": "Advanced Doctor Appointment & HMS",
+    "description": "Hospital Management System with AI integration for doctor appointments and patient records.",
+    "link": "#",
+    "category": "web"
+  },
+  {
+    "title": "Personal Portfolio",
+    "description": "Premium personal portfolio website with interactive 3D effects and animations.",
+    "link": "https://rupam.co.in",
+    "category": "web"
+  },
+  {
+    "title": "Spotify Website",
+    "description": "High-fidelity UI clone of Spotify music streaming platform.",
+    "link": "#",
+    "category": "design"
+  }
+]
