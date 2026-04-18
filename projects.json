@@ -1,25 +1,25 @@
 [
   {
-    "title": "LMS with AI Integration",
-    "description": "AI-Integrated learning management system for student education and progress tracking.",
+    "title": "RM-EDU: AI Learning Hub",
+    "description": "A state-of-the-art LMS integrated with Neural Networks for personalized student trajectory tracking and automated assessment.",
     "link": "https://rmedu.cleverapps.io",
     "category": "web"
   },
   {
-    "title": "Advanced Doctor Appointment & HMS",
-    "description": "Hospital Management System with AI integration for doctor appointments and patient records.",
+    "title": "Aura HMS: Next-Gen Health",
+    "description": "Enterprise-grade Hospital Management System featuring AI-driven diagnostics assistance and optimized patient data orchestration.",
     "link": "#",
     "category": "web"
   },
   {
-    "title": "Personal Portfolio",
-    "description": "Premium personal portfolio website with interactive 3D effects and animations.",
+    "title": "Quantum Portfolio v3",
+    "description": "Highly immersive 3D digital workspace designed with glassmorphism, parallax effects, and real-time interactive backgrounds.",
     "link": "https://rupam.co.in",
     "category": "web"
   },
   {
-    "title": "Spotify Website",
-    "description": "High-fidelity UI clone of Spotify music streaming platform.",
+    "title": "EchoMusic: Spotify UI 2.0",
+    "description": "Ultra high-fidelity visual experience of a modern music ecosystem, focusing on fluid animations and seamless user journeys.",
     "link": "#",
     "category": "design"
   }

@@ -4,41 +4,40 @@
 /* ----- VARIABLES ----- */
 :root {
     /* Colors - Midnight & Electric Theme */
-    --body-bg: #050507;
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    /* Subtle frost */
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --body-bg: #030305;
+    --glass-bg: rgba(255, 255, 255, 0.02);
+    --glass-border: rgba(255, 255, 255, 0.1);
     --glass-highlight: rgba(255, 255, 255, 0.15);
 
     --text-main: #ffffff;
     --text-muted: #94a3b8;
     --text-accent: #00f2ff;
-    /* Electric Blue */
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, #00c6ff, #0072ff);
-    --gradient-glow: radial-gradient(circle at center, rgba(0, 242, 255, 0.15), transparent 60%);
-    --gradient-text: linear-gradient(to right, #ffffff, #a5b4fc);
+    --gradient-primary: linear-gradient(135deg, #00f2ff, #0072ff);
+    --gradient-glow: radial-gradient(circle at center, rgba(0, 242, 255, 0.2), transparent 70%);
+    --gradient-text: linear-gradient(to right, #ffffff, #a5b4fc, #00f2ff);
+    --gradient-neon: linear-gradient(90deg, #00f2ff, #7000ff, #00f2ff);
 
     /* Accents */
     --accent-primary: #00f2ff;
-    --accent-secondary: #4f46e5;
-    /* Indigo */
-    --accent-glow: rgba(0, 242, 255, 0.4);
+    --accent-secondary: #7000ff;
+    --accent-glow: rgba(0, 242, 255, 0.6);
+    --neon-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
 
     /* Layout */
     --nav-height: 90px;
-    --section-padding: 4rem 0;
-    --border-radius-lg: 24px;
-    --border-radius-md: 16px;
+    --section-padding: 6rem 0;
+    --border-radius-lg: 32px;
+    --border-radius-md: 20px;
 
     /* Shadows */
-    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 12px 40px rgba(0, 198, 255, 0.2);
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-hover: 0 20px 50px rgba(0, 198, 255, 0.25);
 
     /* Transitions */
     --transition-fast: 0.2s ease;
-    --transition-smooth: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    --transition-smooth: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 /* Light Theme */
@@ -88,6 +87,65 @@ h6 {
     font-weight: 700;
     line-height: 1.2;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ----- PRELOADER ----- */
+#pre_loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #030305;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s;
+}
+
+.loader-content {
+    text-align: center;
+    width: 150px;
+}
+
+.loader-logo {
+    font-size: 42px;
+    font-weight: 900;
+    font-family: 'Outfit', sans-serif;
+    color: #fff;
+    margin-bottom: 20px;
+    letter-spacing: -1px;
+    animation: pulseLogo 2s infinite ease-in-out;
+}
+
+@keyframes pulseLogo {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; text-shadow: 0 0 20px var(--accent-glow); }
+}
+
+.loader-bar {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.loader-progress {
+    width: 100%;
+    height: 100%;
+    background: var(--gradient-primary);
+    position: absolute;
+    left: -100%;
+    animation: loadProgress 2s infinite ease-in-out;
+}
+
+@keyframes loadProgress {
+    0% { left: -100%; }
+    50% { left: 0; }
+    100% { left: 100%; }
 }
 
 /* ----- GRADIENT MESH BACKGROUND ----- */
@@ -927,24 +985,33 @@ nav {
 }
 
 .featured-name p {
-    font-size: 64px;
+    font-size: 72px;
     font-weight: 800;
     color: var(--text-main);
     line-height: 1.1;
     margin: 0;
     font-family: 'Outfit', sans-serif;
+    letter-spacing: -2px;
 }
 
 .typedText {
-    color: #fff;
-    text-transform: capitalize;
-    position: relative;
-    z-index: 1;
+    background: var(--gradient-neon);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+    to {
+        background-position: 200% center;
+    }
 }
 
 /* Fade in animation */
 .fade-in {
-    animation: fadeIn 1s ease-in-out;
+    animation: fadeIn 1s ease-in-out forwards;
 }
 
 @keyframes fadeIn {
@@ -952,32 +1019,17 @@ nav {
         opacity: 0;
         transform: translateY(20px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-@keyframes rotateGradient {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
 .featured-text-info p {
-    font-size: 18px;
-    color: var(--text-main);
-    max-width: 540px;
-    margin: 30px 0 40px;
+    font-size: 19px;
+    color: var(--text-muted);
+    max-width: 580px;
+    margin: 35px 0 45px;
     line-height: 1.8;
 }
 
@@ -2275,35 +2327,44 @@ footer {
    ADVANCED AI CHATBOT WIDGET
    ========================================================= */
 
-/* ----- FAB (Floating Action Button) ----- */
+/* ============ AI CHATBOT PREMIUM STYLES ============ */
 .chatbot-fab {
     position: fixed;
-    bottom: 32px;
-    right: 32px;
-    width: 62px;
-    height: 62px;
+    bottom: 30px;
+    right: 30px;
+    width: 65px;
+    height: 65px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #00c6ff, #0072ff, #7000ff);
+    background: var(--gradient-primary);
     border: none;
+    color: #fff;
+    font-size: 28px;
     cursor: pointer;
-    z-index: 9999;
-    box-shadow: 0 8px 32px rgba(0, 114, 255, 0.5), 0 0 0 0 rgba(0, 198, 255, 0.4);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.3s ease;
-    animation: fabPulse 3s ease-in-out infinite;
+    z-index: 999;
+    box-shadow: 0 10px 40px rgba(0, 198, 255, 0.4),
+                inset 0 0 15px rgba(255, 255, 255, 0.3);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.chatbot-fab:hover {
-    transform: scale(1.12) translateY(-3px);
-    box-shadow: 0 16px 48px rgba(0, 114, 255, 0.7), 0 0 0 8px rgba(0, 198, 255, 0.15);
-    animation: none;
+.chatbot-fab::before {
+    content: '';
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-primary);
+    opacity: 0;
+    animation: pulseChatbot 2s infinite;
 }
 
-.chatbot-fab.active {
-    animation: none;
+@keyframes pulseChatbot {
+    0% { transform: scale(0.8); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+.chatbot-fab:hover {
     box-shadow: 0 8px 32px rgba(0, 114, 255, 0.5);
 }
 
