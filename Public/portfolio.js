@@ -589,7 +589,7 @@ function initChatbot() {
         const time = getTime();
 
         if (role === 'assistant') {
-            if (animate) speakText(content);
+            // speakText(content); // Removed automatic speech for every message as requested
             const bubbleId = 'bot-msg-' + Date.now() + Math.floor(Math.random() * 1000);
             row.innerHTML = `
                 <div class="chatbot-msg-avatar"><i class="uil uil-robot"></i></div>
@@ -733,6 +733,12 @@ function initChatbot() {
         fab.classList.add('active');
         badge.classList.add('hidden');
         scrollBottom(); // Ensure we are at the bottom when opening
+        
+        // Play Multilingual Welcome Message once when opened
+        setTimeout(() => {
+            speakText("Welcome! Shwa-go-tom! Swa-gat-hai!");
+        }, 600);
+        
         setTimeout(() => inputEl.focus(), 400);
     }
 
@@ -750,8 +756,8 @@ function initChatbot() {
             <div class="chatbot-msg bot-msg">
                 <div class="chatbot-msg-avatar"><i class="uil uil-robot"></i></div>
                 <div class="chatbot-msg-bubble">
-                    <p>👋 Hi! I'm <strong>RMAI</strong>, Rupam's personal AI assistant.</p>
-                    <p>Ask me anything about Rupam — his skills, experience, projects, or how to hire him!</p>
+                    <p>Hi, I’m <strong>Apex</strong> 👋 Rupam Mandal’s personal AI assistant.</p>
+                    <p>I’m here to help you explore his skills, projects, and services instantly. If you need a website, software, or custom solution, feel free to ask!</p>
                     <span class="chatbot-msg-time">Just now</span>
                 </div>
             </div>`;
