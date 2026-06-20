@@ -441,7 +441,10 @@ function initChatbot() {
         fab.classList.add('active');
         if (badge) badge.classList.add('hidden');
         scrollBottom();
-        setTimeout(() => inputEl.focus(), 350);
+        // On mobile, don't auto-focus (keyboard push causes layout shift)
+        if (window.innerWidth > 768) {
+            setTimeout(() => inputEl.focus(), 350);
+        }
     }
 
     function closeChat() {
@@ -544,10 +547,12 @@ function initChatbot() {
         if (isOpen && !panel.contains(e.target) && !fab.contains(e.target)) closeChat();
     });
 
-    // Auto-open after 5s on first visit
-    if (!sessionStorage.getItem('apex_visited')) {
+    // Auto-open after 5s on first visit — ONLY on desktop, not mobile
+    if (!sessionStorage.getItem('apex_visited') && window.innerWidth > 768) {
         sessionStorage.setItem('apex_visited', '1');
         setTimeout(() => { if (!isOpen) openChat(); }, 5000);
+    } else {
+        sessionStorage.setItem('apex_visited', '1');
     }
 }
 

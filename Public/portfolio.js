@@ -1,13 +1,42 @@
 /* ----- NAVIGATION BAR FUNCTION ----- */
 function myMenuFunction() {
     var menuBtn = document.getElementById("myNavMenu");
+    var menuIcon = document.querySelector(".nav-menu-btn i");
 
     if (menuBtn.className === "nav-menu") {
         menuBtn.className += " responsive";
+        if (menuIcon) { menuIcon.className = "uil uil-times"; }
     } else {
         menuBtn.className = "nav-menu";
+        if (menuIcon) { menuIcon.className = "uil uil-bars"; }
     }
 }
+
+// Close mobile menu when a nav link is clicked
+document.addEventListener('DOMContentLoaded', function() {
+    var navLinks = document.querySelectorAll('.nav-link');
+    navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+            var menuBtn = document.getElementById("myNavMenu");
+            var menuIcon = document.querySelector(".nav-menu-btn i");
+            menuBtn.className = "nav-menu";
+            if (menuIcon) { menuIcon.className = "uil uil-bars"; }
+        });
+    });
+
+    // Close menu when tapping outside (on overlay)
+    document.addEventListener('click', function(e) {
+        var menuBtn = document.getElementById("myNavMenu");
+        var menuToggle = document.querySelector(".nav-menu-btn");
+        var menuIcon = document.querySelector(".nav-menu-btn i");
+        if (menuBtn && menuBtn.classList.contains('responsive')) {
+            if (!menuBtn.contains(e.target) && !menuToggle.contains(e.target)) {
+                menuBtn.className = "nav-menu";
+                if (menuIcon) { menuIcon.className = "uil uil-bars"; }
+            }
+        }
+    });
+});
 
 /* ----- THEME TOGGLE ----- */
 const themeToggle = document.getElementById('theme-toggle');
