@@ -37,15 +37,9 @@ function headerShadow() {
     const navHeader = document.getElementById("header");
 
     if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
-        navHeader.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.3)";
-        navHeader.style.height = "80px";
-        navHeader.style.background = "rgba(5, 5, 7, 0.95)";
-        navHeader.style.backdropFilter = "blur(25px) saturate(180%)";
+        navHeader.classList.add("header-scrolled");
     } else {
-        navHeader.style.boxShadow = "none";
-        navHeader.style.height = "90px";
-        navHeader.style.background = "rgba(5, 5, 7, 0.8)";
-        navHeader.style.backdropFilter = "blur(20px) saturate(180%)";
+        navHeader.classList.remove("header-scrolled");
     }
 }
 
@@ -233,15 +227,21 @@ function handleContactForm(e) {
 }
 
 /* ----- PRELOADER ----- */
-window.addEventListener('load', function () {
+function hidePreloader() {
     var loader = document.getElementById('pre_loader');
     if (loader) {
-        loader.style.opacity = '0';
+        loader.classList.add('hidden');
         setTimeout(function () {
             loader.style.display = 'none';
-        }, 500);
+        }, 700);
     }
-});
+}
+
+window.addEventListener('load', hidePreloader);
+
+// Safety: force hide after 3 seconds no matter what
+setTimeout(hidePreloader, 3000);
+
 
 
 /* ----- FETCH PROJECTS FROM DB ----- */
@@ -436,467 +436,92 @@ function showNotify(message, type = 'success', timeout = 3000) {
     }, timeout);
 }
 
+/* =========================================================
+   LIVE CLOCK
+   ========================================================= */
+function updateNavClock() {
+    const timeEl = document.getElementById('navClockTime');
+    const dateEl = document.getElementById('navClockDate');
+    if (!timeEl || !dateEl) return;
+
+    const now = new Date();
+    
+    // Time formatting: HH:MM:SS
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+    
+    hours = hours % 12;
+    hours = hours ? hours : 12; // the hour '0' should be '12'
+    
+    const strHours = hours.toString().padStart(2, '0');
+    const strMins = minutes.toString().padStart(2, '0');
+    const strSecs = seconds.toString().padStart(2, '0');
+    
+    timeEl.innerHTML = `${strHours}:${strMins}:${strSecs} <span style="font-size:0.7em">${ampm}</span>`;
+    
+    // Date formatting: Day, Month Date, Year
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const dayName = days[now.getDay()];
+    const monthName = months[now.getMonth()];
+    const date = now.getDate();
+    const year = now.getFullYear();
+    
+    dateEl.textContent = `${dayName}, ${date} ${monthName} ${year}`;
+}
+
+// Start clock
+setInterval(updateNavClock, 1000);
+updateNavClock(); // Initial call
 
 /* =========================================================
-   ADVANCED GROQ AI CHATBOT
+   DYNAMIC EXPERIENCE COUNTER (EXACT DATE)
    ========================================================= */
-function initChatbot() {
-    /* ---- DOM References ---- */
-    const fab         = document.getElementById('chatbotFab');
-    const panel       = document.getElementById('chatbotPanel');
-    const closeBtn    = document.getElementById('chatbotClose');
-    const clearBtn    = document.getElementById('chatbotClear');
-    const voiceBtn    = document.getElementById('chatbotVoice');
-    const sendBtn     = document.getElementById('chatbotSend');
-    const stopBtn     = document.getElementById('chatbotStop');
-    const inputEl     = document.getElementById('chatbotInput');
-    const messagesEl  = document.getElementById('chatbotMessages');
-    const suggestEl   = document.getElementById('chatbotSuggestions');
-    const badge       = document.getElementById('chatbotBadge');
-    const chips       = document.querySelectorAll('.chatbot-chip');
+function updateExperience() {
+    const heroExp = document.getElementById('dynamic-exp');
+    const statsExpNum = document.getElementById('stats-exp-num');
+    const statsExpDetail = document.getElementById('stats-exp-detail');
 
-    if (!fab || !panel) {
-        console.warn("Chatbot elements not found in DOM.");
-        return; 
+    // User joined: 6 December 2024
+    const startDate = new Date('2024-12-06T00:00:00');
+    const now = new Date();
+
+    let years = now.getFullYear() - startDate.getFullYear();
+    let months = now.getMonth() - startDate.getMonth();
+    let days = now.getDate() - startDate.getDate();
+
+    if (days < 0) {
+        months--;
+        // Get days in previous month
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+        days += prevMonth.getDate();
     }
-
-    /* ---- State ---- */
-    let isOpen        = false;
-    let isLoading     = false;
-    let isVoiceEnabled= true; // Voice on by default
-    let conversationHistory = []; // [{role: 'user'|'assistant', content: '...'}]
-    
-    let finishTyping = null;
-    let currentAbortController = null;
-
-    function showStopBtn() {
-        if (sendBtn) sendBtn.style.display = 'none';
-        if (stopBtn) stopBtn.style.display = 'flex';
-    }
-
-    function hideStopBtn() {
-        if (sendBtn) sendBtn.style.display = 'flex';
-        if (stopBtn) stopBtn.style.display = 'none';
-    }
-
-    /* ---- Text to Speech logic ---- */
-    let synth = window.speechSynthesis;
-    let sweetVoice = null;
-    
-    function loadVoices() {
-        if (!synth) return;
-        const voices = synth.getVoices();
-        // Priority for sweet female voices based on browser options:
-        sweetVoice = voices.find(v => v.name.includes('Google UK English Female')) || 
-                     voices.find(v => v.name.includes('Google US English')) ||
-                     voices.find(v => v.name.includes('Zira')) ||
-                     voices.find(v => v.name.includes('Aria')) ||
-                     voices.find(v => v.name.includes('Samantha')) ||
-                     voices.find(v => v.name.includes('Female')) || 
-                     voices[0];
+    if (months < 0) {
+        years--;
+        months += 12;
     }
     
-    if (synth && synth.onvoiceschanged !== undefined) {
-        synth.onvoiceschanged = loadVoices;
-    }
-    // Attempt loading immediately if voices are already cached
-    loadVoices();
-    
-    function speakText(text) {
-        if (!isVoiceEnabled || !synth) return;
-        synth.cancel(); // Stop playing current audio if any
-        
-        // Strip markdown and emojis exactly to get purely readable text
-        let rawText = text.replace(/[*_~`#\-]/g, '')
-                          .replace(/👋|✅|❌/g, '')
-                          .replace(/<\/?[^>]+(>|$)/g, "") // simple HTML strip
-                          .trim();
-                          
-        const utterThis = new SpeechSynthesisUtterance(rawText);
-        if (sweetVoice) utterThis.voice = sweetVoice;
-        utterThis.pitch = 1.25; // Slightly higher pitch makes it sound a bit sweeter
-        utterThis.rate = 1.05;  // Slightly faster
-        
-        synth.speak(utterThis);
+    // Prevent negative numbers if currently before start date somehow
+    if (years < 0) { years=0; months=0; days=0; }
+
+    // 1. Update Hero section
+    if (heroExp) {
+        heroExp.innerHTML = `${years}<span style="font-size:0.55em; color:var(--c); margin-right:4px;">Y</span>${months}<span style="font-size:0.55em; color:var(--c);">M</span>`;
     }
 
-    /* ---- Helpers ---- */
-    function getTime() {
-        return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    // 2. Update Stats section
+    if (statsExpNum) {
+        statsExpNum.innerHTML = `${years}<span style="font-size:0.6em; color:var(--c);">Y</span> ${months}<span style="font-size:0.6em; color:var(--c);">M</span>`;
     }
-
-    function scrollBottom() {
-        requestAnimationFrame(() => {
-            messagesEl.scrollTo({
-                top: messagesEl.scrollHeight,
-                behavior: 'smooth'
-            });
-        });
-    }
-
-    // Auto-scroll when messages change (using MutationObserver for real-time scrolling even during typing)
-    const scrollObserver = new MutationObserver(() => {
-        if (!isOpen) return; // Don't scroll if panel is closed
-        
-        // Only scroll if user is already near the bottom (optional, but good for UX)
-        // Here we just scroll always as it's a chatbot
-        messagesEl.scrollTo({
-            top: messagesEl.scrollHeight,
-            behavior: 'smooth'
-        });
-    });
-
-    scrollObserver.observe(messagesEl, { 
-        childList: true, 
-        subtree: true, 
-        characterData: true 
-    });
-
-    /**
-     * Basic Markdown → HTML renderer
-     * Handles: **bold**, `code`, bullet lists (- item), numbered points
-     */
-    function markdownToHtml(text) {
-        // Escape HTML first
-        let html = text
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-
-        // Bold: **text**
-        html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-        // Inline code: `code`
-        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-        // Convert line breaks to paragraphs
-        const lines = html.split('\n');
-        const result = [];
-        let inList = false;
-
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) {
-                if (inList) { result.push('</ul>'); inList = false; }
-                continue;
-            }
-            // Bullet list item: starts with - or * or •
-            if (/^[-*•]\s/.test(line)) {
-                if (!inList) { result.push('<ul>'); inList = true; }
-                result.push(`<li>${line.replace(/^[-*•]\s/, '')}</li>`);
-            } else {
-                if (inList) { result.push('</ul>'); inList = false; }
-                result.push(`<p>${line}</p>`);
-            }
-        }
-        if (inList) result.push('</ul>');
-
-        return result.join('');
-    }
-
-    /* ---- Append a message bubble ---- */
-    function appendMessage(role, content, isError = false, animate = false) {
-        const row = document.createElement('div');
-        row.classList.add('chatbot-msg', role === 'user' ? 'user-msg' : 'bot-msg');
-        if (isError) row.classList.add('error-msg');
-
-        const time = getTime();
-
-        if (role === 'assistant') {
-            // speakText(content); // Removed automatic speech for every message as requested
-            const bubbleId = 'bot-msg-' + Date.now() + Math.floor(Math.random() * 1000);
-            row.innerHTML = `
-                <div class="chatbot-msg-avatar"><i class="uil uil-robot"></i></div>
-                <div class="chatbot-msg-bubble">
-                    <div id="${bubbleId}" class="bot-msg-content"></div>
-                    <span class="chatbot-msg-time">${time}</span>
-                </div>`;
-            messagesEl.appendChild(row);
-            scrollBottom();
-
-            const contentEl = document.getElementById(bubbleId);
-            const htmlHtml = markdownToHtml(content);
-
-            if (animate && typeof Typed !== 'undefined') {
-                let t = new Typed(`#${bubbleId}`, {
-                    strings: [htmlHtml],
-                    typeSpeed: 10,
-                    showCursor: false,
-                    onStringTyped: function() {
-                        finishTyping = null;
-                        hideStopBtn();
-                        scrollBottom();
-                    }
-                });
-                finishTyping = () => {
-                    t.destroy();
-                    document.getElementById(bubbleId).innerHTML = htmlHtml;
-                    hideStopBtn();
-                    scrollBottom();
-                };
-            } else if (animate) {
-                // Fallback manual typing
-                let stopped = false;
-                finishTyping = () => {
-                    stopped = true;
-                    document.getElementById(bubbleId).innerHTML = htmlHtml;
-                    hideStopBtn();
-                    scrollBottom();
-                };
-                let i = 0;
-                let isTag = false;
-                let currentHTML = '';
-                function type() {
-                    if (stopped) return;
-                    if (i < htmlHtml.length) {
-                        currentHTML += htmlHtml.charAt(i);
-                        if (htmlHtml.charAt(i) === '<') isTag = true;
-                        if (htmlHtml.charAt(i) === '>') isTag = false;
-                        
-                        contentEl.innerHTML = currentHTML;
-                        i++;
-                        
-                        if (isTag) {
-                            type(); // typing tags instantly
-                        } else {
-                            setTimeout(type, 10);
-                            if(i % 3 === 0) scrollBottom();
-                        }
-                    } else {
-                        finishTyping = null;
-                        hideStopBtn();
-                        scrollBottom();
-                    }
-                }
-                type();
-            } else {
-                contentEl.innerHTML = htmlHtml;
-                scrollBottom();
-            }
-        } else {
-            row.innerHTML = `
-                <div class="chatbot-msg-bubble">
-                    <p>${content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</p>
-                    <span class="chatbot-msg-time">${time}</span>
-                </div>`;
-            messagesEl.appendChild(row);
-            scrollBottom();
-        }
-
-        return row;
-    }
-
-    /* ---- Typing Indicator ---- */
-    let typingEl = null;
-    function showTyping() {
-        typingEl = document.createElement('div');
-        typingEl.classList.add('chatbot-typing');
-        typingEl.innerHTML = `
-            <div class="chatbot-msg-avatar"><i class="uil uil-robot"></i></div>
-            <div class="chatbot-typing-bubble">
-                <span></span><span></span><span></span>
-            </div>`;
-        messagesEl.appendChild(typingEl);
-        scrollBottom();
-    }
-
-    function hideTyping() {
-        if (typingEl) { typingEl.remove(); typingEl = null; }
-    }
-
-    /* ---- Send Message ---- */
-    async function sendMessage(userText) {
-        userText = userText.trim();
-        if (!userText || isLoading) return;
-
-        // Hide suggestions after first message
-        suggestEl.classList.add('hidden');
-
-        // Append user bubble
-        appendMessage('user', userText);
-
-        // Add to history
-        conversationHistory.push({ role: 'user', content: userText });
-
-        // Show typing
-        isLoading = true;
-        showStopBtn();
-        showTyping();
-
-        currentAbortController = new AbortController();
-
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ messages: conversationHistory }),
-                signal: currentAbortController.signal
-            });
-
-            hideTyping();
-
-            if (!response.ok) {
-                const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.error || `HTTP ${response.status}`);
-            }
-
-            const data = await response.json();
-            const reply = data.reply || "Sorry, I couldn't get a response.";
-
-            // Append bot reply with animation
-            appendMessage('assistant', reply, false, true);
-
-            // Save to history
-            conversationHistory.push({ role: 'assistant', content: reply });
-
-        } catch (err) {
-            hideTyping();
-            hideStopBtn();
-            if (err.name === 'AbortError') {
-                appendMessage('assistant', `*Generation stopped by user.*`, true);
-            } else {
-                console.error('Chatbot error:', err);
-                appendMessage('assistant', `⚠️ Error: ${err.message}. Please try again.`, true);
-            }
-        } finally {
-            isLoading = false;
-            currentAbortController = null;
-            inputEl.focus();
-        }
-    }
-
-    /* ---- Open / Close Panel ---- */
-    function openChat() {
-        isOpen = true;
-        panel.classList.add('open');
-        panel.setAttribute('aria-hidden', 'false');
-        fab.classList.add('active');
-        badge.classList.add('hidden');
-        scrollBottom(); // Ensure we are at the bottom when opening
-        
-        // Play Multilingual Welcome Message once when opened
-        setTimeout(() => {
-            speakText("Welcome! Shwa-go-tom! Swa-gat-hai!");
-        }, 600);
-        
-        setTimeout(() => inputEl.focus(), 400);
-    }
-
-    function closeChat() {
-        isOpen = false;
-        panel.classList.remove('open');
-        panel.setAttribute('aria-hidden', 'true');
-        fab.classList.remove('active');
-    }
-
-    function clearChat() {
-        conversationHistory = [];
-        // Keep only the initial welcome message
-        messagesEl.innerHTML = `
-            <div class="chatbot-msg bot-msg">
-                <div class="chatbot-msg-avatar"><i class="uil uil-robot"></i></div>
-                <div class="chatbot-msg-bubble">
-                    <p>Hi, I’m <strong>Apex</strong> 👋 Rupam Mandal’s personal AI assistant.</p>
-                    <p>I’m here to help you explore his skills, projects, and services instantly. If you need a website, software, or custom solution, feel free to ask!</p>
-                    <span class="chatbot-msg-time">Just now</span>
-                </div>
-            </div>`;
-        suggestEl.classList.remove('hidden');
-    }
-
-    /* ---- Auto-resize Textarea ---- */
-    function autoResize() {
-        inputEl.style.height = 'auto';
-        inputEl.style.height = Math.min(inputEl.scrollHeight, 130) + 'px';
-    }
-
-    /* ---- Event Listeners ---- */
-    fab.addEventListener('click', () => {
-        if (isOpen) closeChat(); else openChat();
-    });
-
-    closeBtn.addEventListener('click', closeChat);
-
-    clearBtn.addEventListener('click', () => {
-        clearChat();
-        if (synth) synth.cancel();
-    });
-
-    if (voiceBtn) {
-        voiceBtn.addEventListener('click', () => {
-            isVoiceEnabled = !isVoiceEnabled;
-            if (!isVoiceEnabled) {
-                voiceBtn.classList.add('muted');
-                voiceBtn.title = 'Toggle Voice (Muted)';
-                if (synth) synth.cancel();
-            } else {
-                voiceBtn.classList.remove('muted');
-                voiceBtn.title = 'Toggle Voice (Unmuted)';
-            }
-        });
-    }
-
-    sendBtn.addEventListener('click', () => {
-        const text = inputEl.value;
-        inputEl.value = '';
-        autoResize();
-        sendMessage(text);
-    });
-
-    if (stopBtn) {
-        stopBtn.addEventListener('click', () => {
-            if (currentAbortController) {
-                currentAbortController.abort();
-                currentAbortController = null;
-            }
-            if (finishTyping) {
-                finishTyping();
-                finishTyping = null;
-            }
-            hideStopBtn();
-        });
-    }
-
-    inputEl.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            const text = inputEl.value;
-            inputEl.value = '';
-            autoResize();
-            sendMessage(text);
-        }
-    });
-
-    inputEl.addEventListener('input', autoResize);
-
-    // Suggestion chips
-    chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            const msg = chip.getAttribute('data-msg');
-            if (msg) sendMessage(msg);
-        });
-    });
-
-    // Close panel on outside click
-    document.addEventListener('click', (e) => {
-        if (isOpen && !panel.contains(e.target) && !fab.contains(e.target)) {
-            closeChat();
-        }
-    });
-
-    // Open chat automatically after 4 seconds on first visit
-    const hasVisited = sessionStorage.getItem('chatbot_visited');
-    if (!hasVisited) {
-        sessionStorage.setItem('chatbot_visited', '1');
-        setTimeout(() => {
-            if (!isOpen) openChat();
-        }, 4000);
+    if (statsExpDetail) {
+        statsExpDetail.innerHTML = `${years} YRS, ${months} MOS, ${days} DAYS`;
     }
 }
 
-// Ensure the DOM is fully loaded before initializing
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initChatbot);
-} else {
-    initChatbot();
-}
+// Update the experience on load
+updateExperience();
+// Check and update periodically
+setInterval(updateExperience, 1000 * 60 * 60); // Every hour

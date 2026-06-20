@@ -338,11 +338,119 @@ app.post("/api/chat", async (req, res) => {
     }
 });
 
+// 4. AI Chatbot STREAMING (SSE — ChatGPT style real-time)
+app.post("/api/chat/stream", async (req, res) => {
+    try {
+        const { messages } = req.body;
+        if (!messages || !Array.isArray(messages)) {
+            return res.status(400).json({ error: "Invalid messages array" });
+        }
+
+        // SSE headers
+        res.setHeader("Content-Type", "text/event-stream");
+        res.setHeader("Cache-Control", "no-cache");
+        res.setHeader("Connection", "keep-alive");
+        res.setHeader("X-Accel-Buffering", "no");
+        res.flushHeaders();
+
+        const fullMessages = [
+            { role: "system", content: RUPAM_SYSTEM_PROMPT },
+            ...messages.slice(-15)
+        ];
+
+        const bodyObj = {
+            model: GROQ_MODEL,
+            messages: fullMessages,
+            max_tokens: 1024,
+            temperature: 0.7,
+            stream: true
+        };
+        const body = JSON.stringify(bodyObj);
+
+        const options = {
+            hostname: "api.groq.com",
+            path: "/openai/v1/chat/completions",
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${GROQ_API_KEY}`,
+                "Content-Length": Buffer.byteLength(body)
+            }
+        };
+
+        let buffer = "";
+        const groqReq = https.request(options, (groqRes) => {
+            if (groqRes.statusCode !== 200) {
+                let errBody = "";
+                groqRes.on("data", chunk => errBody += chunk.toString());
+                groqRes.on("end", () => {
+                    const errorMsg = "API Error: " + groqRes.statusCode + " " + errBody;
+                    res.write("data: " + JSON.stringify({ error: errorMsg }) + "\n\n");
+                    res.write("data: [DONE]\n\n");
+                    res.end();
+                });
+                return;
+            }
+
+            groqRes.on("data", (chunk) => {
+                buffer += chunk.toString();
+                const lines = buffer.split("\n");
+                buffer = lines.pop(); // keep incomplete line
+
+                for (const line of lines) {
+                    const trimmed = line.trim();
+                    if (!trimmed || !trimmed.startsWith("data: ")) continue;
+                    const data = trimmed.slice(6);
+                    if (data === "[DONE]") {
+                        res.write("data: [DONE]\n\n");
+                        return;
+                    }
+                    try {
+                        const parsed = JSON.parse(data);
+                        const content = parsed.choices?.[0]?.delta?.content;
+                        if (content) {
+                            res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                        }
+                        // Check for finish reason
+                        const finish = parsed.choices?.[0]?.finish_reason;
+                        if (finish === "stop") {
+                            res.write("data: [DONE]\n\n");
+                        }
+                    } catch (e) { /* skip malformed */ }
+                }
+            });
+
+            groqRes.on("end", () => {
+                res.write("data: [DONE]\n\n");
+                res.end();
+            });
+        });
+
+        groqReq.on("error", (err) => {
+            console.error("Stream error:", err);
+            res.write(`data: ${JSON.stringify({ error: err.message })}\n\n`);
+            res.end();
+        });
+
+        // Handle client disconnect
+        req.on("close", () => { groqReq.destroy(); });
+
+        groqReq.write(body);
+        groqReq.end();
+
+    } catch (err) {
+        console.error("❌ Stream setup error:", err);
+        res.write(`data: ${JSON.stringify({ error: "Server error" })}\n\n`);
+        res.end();
+    }
+});
+
 // Start Server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
-    console.log(`📍 Mode: Local JSON Data (MongoDB Removed)`);
+    console.log(`📍 Mode: Local JSON Data`);
     console.log(`🔗 Projects API: GET http://localhost:${PORT}/api/projects`);
     console.log(`🤖 Chatbot API: POST http://localhost:${PORT}/api/chat`);
+    console.log(`⚡ Stream API:   POST http://localhost:${PORT}/api/chat/stream`);
 });
