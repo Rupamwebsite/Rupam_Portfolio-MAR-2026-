@@ -5,27 +5,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- ----- SEO & META TAGS ----- -->
+    <title>Rupam Mandal | IT Executive & Full-Stack Developer</title>
+    <meta name="description" content="Portfolio of Rupam Mandal — IT Executive at Peerless Hospital & Full-Stack Developer specializing in modern web applications, HMS/HIS systems, Oracle PL/SQL, React, and Node.js.">
+    <meta name="keywords" content="Rupam Mandal, Full Stack Developer, Hospital Information Systems, IT Executive, React, Node.js, Oracle PL/SQL, Web Developer Kolkata">
+    <meta name="author" content="Rupam Mandal">
 
-    <!-- ----- GOOGLE FONTS (Space Grotesk + Inter + JetBrains Mono) ----- -->
+    <!-- ----- GOOGLE FONTS (Space Grotesk + Plus Jakarta Sans + JetBrains Mono) ----- -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- ---------ICONS ---------- -->
+    <!-- --------- ICONS ---------- -->
     <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.8/css/line.css">
 
     <!-- --------- CSS ---------- -->
     <link rel="stylesheet" href="./portfolio.css">
-
-    <!-- --------- ICON ---------- -->
-    <!-- <link rel="shortcut icon" href="assets/images/favicon.png" type="image/x-icon"> -->
-
-    <title>Rupam Mandal || Developer || IT </title>
 </head>
 
 <body>
+    <!-- Top Scroll Progress Bar -->
+    <div class="scroll-progress-bar" id="scrollProgressBar"></div>
+
+    <!-- Custom Cursor Follower (Desktop only) -->
+    <div class="custom-cursor-dot" id="cursorDot"></div>
+    <div class="custom-cursor-outline" id="cursorOutline"></div>
+
     <!-- Premium Cyber HUD Pre-loader -->
     <div id="pre_loader" class="loader-wrap">
         <div class="loader-bg-grid"></div>
@@ -45,7 +50,7 @@
                     <span class="status-indicator-dot"></span>
                     <span class="sys-title">SYS_CORE // ONLINE</span>
                 </div>
-                <div class="loader-hud-version">v4.0.26</div>
+                <div class="loader-hud-version">v4.5.26</div>
             </div>
 
             <!-- Central Orbital Reactor Core -->
@@ -53,13 +58,13 @@
                 <svg class="loader-rings-svg" viewBox="0 0 200 200">
                     <defs>
                         <linearGradient id="loaderRingGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#06efd4" stop-opacity="0.9" />
+                            <stop offset="0%" stop-color="#00f2fe" stop-opacity="0.9" />
                             <stop offset="50%" stop-color="#3b82f6" stop-opacity="0.6" />
-                            <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.1" />
+                            <stop offset="100%" stop-color="#a855f7" stop-opacity="0.1" />
                         </linearGradient>
                         <linearGradient id="loaderRingGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0.9" />
-                            <stop offset="70%" stop-color="#06efd4" stop-opacity="0.4" />
+                            <stop offset="0%" stop-color="#a855f7" stop-opacity="0.9" />
+                            <stop offset="70%" stop-color="#00f2fe" stop-opacity="0.4" />
                             <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.1" />
                         </linearGradient>
                     </defs>
@@ -93,7 +98,6 @@
                 </div>
                 <div class="loader-meter-track">
                     <div class="loader-meter-fill" id="loader_bar_fill"></div>
-                    <div class="loader-meter-spark" id="loader_bar_glow"></div>
                 </div>
             </div>
 
@@ -107,7 +111,8 @@
         </div>
     </div>
 
-    <!-- Gradient Background -->
+    <!-- Interactive Background Canvas & Ambient Mesh -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
     <div class="gradient-bg">
         <div class="gradients-container">
             <div class="g1"></div>
@@ -117,204 +122,372 @@
             <div class="g5"></div>
             <div class="interactive"></div>
         </div>
-        <!-- Floating Decorative Elements -->
-        <div class="floating-shapes">
-            <div class="shape shape-1"></div>
-            <div class="shape shape-2"></div>
-            <div class="shape shape-3"></div>
-            <div class="shape shape-4"></div>
-            <div class="shape shape-5"></div>
-        </div>
-        <!-- Floating Particles -->
-        <div class="particles">
-            <div class="particle particle-1"></div>
-            <div class="particle particle-2"></div>
-            <div class="particle particle-3"></div>
-            <div class="particle particle-4"></div>
-            <div class="particle particle-5"></div>
-            <div class="particle particle-6"></div>
-        </div>
+        <!-- Ambient Grid Background -->
+        <div class="cyber-grid-overlay"></div>
     </div>
-
 
     <div class="container">
         <!-- --------------- HEADER --------------- -->
         <nav id="header">
             <div class="nav-logo">
-                <p class="nav-name">RUPAM &nbsp; MANDAL</p>
+                <a href="#home" class="nav-name-link">
+                    <span class="nav-logo-badge">RM</span>
+                    <span class="nav-name">RUPAM <span class="nav-name-accent">MANDAL</span></span>
+                </a>
             </div>
-
 
             <div class="nav-menu" id="myNavMenu">
                 <ul class="nav_menu_list">
                     <li class="nav_list">
-                        <a href="#home" class="nav-link active-link">Home</a>
+                        <a href="#home" class="nav-link active-link"><i class="uil uil-estate"></i> Home</a>
                     </li>
                     <li class="nav_list">
-                        <a href="#about" class="nav-link">About</a>
-                    </li>
-
-                    <li class="nav_list">
-                        <a href="#services" class="nav-link">Services</a>
-                    </li>
-
-                    <li class="nav_list">
-                        <a href="#certifications" class="nav-link">Certifications</a>
-                    </li>
-
-                    <li class="nav_list">
-                        <a href="#tools" class="nav-link">Tools</a>
-                    </li>
-
-                    <li class="nav_list">
-                        <a href="#experience" class="nav-link">Experience</a>
+                        <a href="#about" class="nav-link"><i class="uil uil-user"></i> About</a>
                     </li>
                     <li class="nav_list">
-                        <a href="#stats" class="nav-link">Stats</a>
+                        <a href="#services" class="nav-link"><i class="uil uil-layer-group"></i> Services</a>
                     </li>
                     <li class="nav_list">
-                        <a href="#projects" class="nav-link">Projects</a>
+                        <a href="#certifications" class="nav-link"><i class="uil uil-award"></i> Certifications</a>
                     </li>
                     <li class="nav_list">
-                        <a href="#contact" class="nav-link">Contact</a>
+                        <a href="#tools" class="nav-link"><i class="uil uil-wrench"></i> Tools</a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#experience" class="nav-link"><i class="uil uil-briefcase-alt"></i> Experience</a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#stats" class="nav-link"><i class="uil uil-chart-line"></i> Stats</a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#projects" class="nav-link"><i class="uil uil-scenery"></i> Projects</a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#contact" class="nav-link"><i class="uil uil-envelope-alt"></i> Contact</a>
                     </li>
                 </ul>
             </div>
+
             <div class="nav-button">
                 <!-- LIVE CLOCK -->
-                <div class="nav-clock" id="navClock">
-                    <div class="nav-clock-time" id="navClockTime">00:00:00</div>
+                <div class="nav-clock" id="navClock" title="Kolkata, India (IST)">
+                    <div class="nav-clock-header">
+                        <span class="live-dot"></span>
+                        <span class="nav-clock-time" id="navClockTime">00:00:00</span>
+                    </div>
                     <div class="nav-clock-date" id="navClockDate">Loading...</div>
                 </div>
-                <button id="theme-toggle" class="btn theme-btn"><i class="uil uil-moon"></i></button>
-                <a href="./Rupam Mandal New exp.pdf"> <button class="btn">Download CV <i
-                            class="uil uil-file-alt"></i></button></a>
+
+                <button id="theme-toggle" class="btn theme-btn" aria-label="Toggle Theme" title="Toggle Light/Dark Theme">
+                    <i class="uil uil-moon"></i>
+                </button>
+
+                <a href="./Rupam Mandal New exp.pdf" class="nav-cv-link" target="_blank">
+                    <button class="btn nav-download-btn">
+                        <span>CV</span>
+                        <i class="uil uil-file-alt"></i>
+                    </button>
+                </a>
             </div>
-            <button class="nav-menu-btn" id="mobileMenuBtn" onclick="myMenuFunction()" aria-label="Toggle menu" style="z-index: 999;">
+
+            <button class="nav-menu-btn" id="mobileMenuBtn" onclick="myMenuFunction()" aria-label="Toggle menu">
                 <i class="uil uil-bars"></i>
             </button>
         </nav>
 
-
         <!-- -------------- MAIN ---------------- -->
         <main class="wrapper">
-            <!-- -------------- FEATURED BOX ---------------- -->
+            <!-- -------------- FEATURED HERO BOX ---------------- -->
             <section class="featured-box" id="home">
                 <div class="featured-text">
-                    <div class="featured-text-card">
-                        <span>Hello This is Rupam Mandal</span>
+                    <!-- Dynamic Availability Status -->
+                    <div class="status-pill-badge">
+                        <span class="status-radar"></span>
+                        <span class="status-text">Available for Full-time &amp; Freelance Projects</span>
                     </div>
+
+                    <div class="featured-greeting">
+                        <span>Hello World, I'm</span>
+                    </div>
+
                     <div class="featured-name">
-                        <p>I'm <span class="typedText"></span></p>
+                        <h1 class="hero-title">Rupam Mandal</h1>
+                        <div class="hero-role-wrap">
+                            <span class="hero-prefix">I am a </span>
+                            <span class="typedText"></span>
+                        </div>
                     </div>
+
                     <div class="featured-text-info">
-                        <p>Detail-oriented IT Executive & Full-Stack Developer with proven expertise in designing,
-                            developing, and optimizing scalable web applications. Adept at driving efficiency
-                            and delivering user-focused IT solutions.
+                        <p>
+                            IT Executive at <strong>Peerless Hospital</strong> &amp; Full-Stack Software Developer. Specialized in building enterprise-grade Hospital Information Systems (HIS), high-performance web applications, modern architectures, and Oracle PL/SQL data solutions.
                         </p>
                     </div>
+
                     <div class="featured-text-btn">
-                        <a href="#contact"> <button class="btn blue-btn">Hire Me</button></a>
-                        <a href="./Rupam Mandal New exp.pdf"> <button class="btn secondary-btn">Download CV <i
-                                    class="uil uil-file-alt"></i></button></a>
+                        <a href="#contact" class="btn-link">
+                            <button class="btn blue-btn magnetic-btn">
+                                <span>Hire Me Now</span>
+                                <i class="uil uil-arrow-right"></i>
+                            </button>
+                        </a>
+                        <a href="./Rupam Mandal New exp.pdf" class="btn-link" target="_blank">
+                            <button class="btn secondary-btn magnetic-btn">
+                                <span>Download CV</span>
+                                <i class="uil uil-import"></i>
+                            </button>
+                        </a>
                     </div>
+
                     <div class="social_icons">
-                        <div class="icon"><a href="https://www.instagram.com/rupam.mandal.71404/"><i
-                                    class="uil uil-instagram"></i></a></div>
-                        <div class="icon"><a href="https://www.linkedin.com/in/rupam-mandal-07755325b"><i
-                                    class="uil uil-linkedin-alt"></i></a></div>
-                        <div class="icon"><a href="https://github.com/Rupamwebsite"><i
-                                    class="uil uil-github-alt"></i></a></div>
+                        <div class="icon">
+                            <a href="https://github.com/Rupamwebsite" target="_blank" rel="noopener noreferrer" aria-label="GitHub Profile" title="GitHub">
+                                <i class="uil uil-github-alt"></i>
+                            </a>
+                        </div>
+                        <div class="icon">
+                            <a href="https://www.linkedin.com/in/rupam-mandal-07755325b" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile" title="LinkedIn">
+                                <i class="uil uil-linkedin-alt"></i>
+                            </a>
+                        </div>
+                        <div class="icon">
+                            <a href="https://www.instagram.com/rupam.mandal.71404/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Profile" title="Instagram">
+                                <i class="uil uil-instagram"></i>
+                            </a>
+                        </div>
+                        <div class="icon">
+                            <a href="mailto:rupammandal240@gmail.com" aria-label="Send Email" title="Email Direct">
+                                <i class="uil uil-envelope-check"></i>
+                            </a>
+                        </div>
                     </div>
+
                     <!-- Hero Stats -->
                     <div class="hero-stats">
-                        <div class="hero-stat-item">
+                        <div class="hero-stat-item spotlight-card">
                             <div class="hero-stat-num" id="dynamic-exp">2+</div>
-                            <div class="hero-stat-label">Experience</div>
+                            <div class="hero-stat-label">Industry Exp.</div>
                         </div>
-                        <div class="hero-stat-item">
-                            <div class="hero-stat-num">10+</div>
-                            <div class="hero-stat-label">Projects Done</div>
+                        <div class="hero-stat-item spotlight-card">
+                            <div class="hero-stat-num">12+</div>
+                            <div class="hero-stat-label">Projects Built</div>
                         </div>
-                        <div class="hero-stat-item">
-                            <div class="hero-stat-num">5+</div>
-                            <div class="hero-stat-label">Happy Clients</div>
+                        <div class="hero-stat-item spotlight-card">
+                            <div class="hero-stat-num">100%</div>
+                            <div class="hero-stat-label">Client Trust</div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Hero 3D Avatar Stage -->
                 <div class="featured-image">
-                    <div class="image-container">
-                        <div class="image">
-                            <img src="./image/WhatsApp Image 2025-11-26 at 7.07.37 PM.jpeg" alt="avatar">
+                    <div class="avatar-stage-wrapper">
+                        <!-- Holographic Ring Stage -->
+                        <div class="hologram-rings">
+                            <div class="holo-ring holo-ring-1"></div>
+                            <div class="holo-ring holo-ring-2"></div>
+                            <div class="holo-ring holo-ring-3"></div>
+                            <div class="holo-glow-core"></div>
+                        </div>
+
+                        <!-- Floating Orbital Tech Badges -->
+                        <div class="orbital-badge badge-top-left" data-tilt>
+                            <span class="badge-icon"><i class="uil uil-react"></i></span>
+                            <div class="badge-meta">
+                                <strong>Full-Stack</strong>
+                                <small>React · Node.js</small>
+                            </div>
+                        </div>
+
+                        <div class="orbital-badge badge-top-right" data-tilt>
+                            <span class="badge-icon"><i class="uil uil-hospital"></i></span>
+                            <div class="badge-meta">
+                                <strong>Hospital IT</strong>
+                                <small>HMS · OPD · IPD</small>
+                            </div>
+                        </div>
+
+                        <div class="orbital-badge badge-bottom-left" data-tilt>
+                            <span class="badge-icon"><i class="uil uil-database"></i></span>
+                            <div class="badge-meta">
+                                <strong>Oracle Certified</strong>
+                                <small>SQL · PL/SQL</small>
+                            </div>
+                        </div>
+
+                        <!-- Main Avatar Container -->
+                        <div class="image-container" data-tilt data-tilt-max="12" data-tilt-speed="400" data-tilt-perspective="1000">
+                            <div class="image">
+                                <img src="./image/WhatsApp Image 2025-11-26 at 7.07.37 PM.jpeg" alt="Rupam Mandal — IT Executive & Full-Stack Developer">
+                            </div>
+                            <div class="avatar-glass-reflection"></div>
                         </div>
                     </div>
                 </div>
+
+                <!-- Scroll Down Indicator -->
                 <div class="scroll-icon-box">
-                    <a href="#about" class="scroll-btn">
-                        <i class="uil uil-mouse-alt"></i>
+                    <a href="#about" class="scroll-btn" aria-label="Scroll to About section">
+                        <div class="mouse-scroll-indicator">
+                            <span class="mouse-wheel"></span>
+                        </div>
                         <p>Scroll Down</p>
                     </a>
                 </div>
             </section>
+
+            <!-- -------------- INFINITE TECH MARQUEE ---------------- -->
+            <div class="marquee-wrapper" aria-hidden="true">
+                <div class="marquee-track marquee-track-left">
+                    <div class="marquee-item"><i class="uil uil-react"></i> React.js</div>
+                    <div class="marquee-item"><i class="uil uil-server"></i> Node.js &amp; Express</div>
+                    <div class="marquee-item"><i class="uil uil-database"></i> Oracle PL/SQL</div>
+                    <div class="marquee-item"><i class="uil uil-hospital"></i> Hospital Management (HMS)</div>
+                    <div class="marquee-item"><i class="uil uil-java-script"></i> Modern JavaScript ES6+</div>
+                    <div class="marquee-item"><i class="uil uil-database-alt"></i> MongoDB &amp; MySQL</div>
+                    <div class="marquee-item"><i class="uil uil-robot"></i> AI Integration &amp; APIs</div>
+                    <div class="marquee-item"><i class="uil uil-brackets-curly"></i> REST APIs &amp; Microservices</div>
+                    <!-- Duplicate for infinite seamless loop -->
+                    <div class="marquee-item"><i class="uil uil-react"></i> React.js</div>
+                    <div class="marquee-item"><i class="uil uil-server"></i> Node.js &amp; Express</div>
+                    <div class="marquee-item"><i class="uil uil-database"></i> Oracle PL/SQL</div>
+                    <div class="marquee-item"><i class="uil uil-hospital"></i> Hospital Management (HMS)</div>
+                    <div class="marquee-item"><i class="uil uil-java-script"></i> Modern JavaScript ES6+</div>
+                    <div class="marquee-item"><i class="uil uil-database-alt"></i> MongoDB &amp; MySQL</div>
+                    <div class="marquee-item"><i class="uil uil-robot"></i> AI Integration &amp; APIs</div>
+                    <div class="marquee-item"><i class="uil uil-brackets-curly"></i> REST APIs &amp; Microservices</div>
+                </div>
+            </div>
+
             <!-- -------------- ABOUT BOX ---------------- -->
             <section class="section" id="about">
                 <div class="top-header">
+                    <span class="section-tag">WHO I AM</span>
                     <h1>About Me</h1>
+                    <p class="section-subtitle">Bridging Enterprise Healthcare IT Systems &amp; Modern Web Architectures</p>
                 </div>
+
                 <div class="row">
+                    <!-- Left: Bio & Code Terminal -->
                     <div class="col">
                         <div class="about-info">
-                            <h3>Professional Summary</h3>
-                            <p>I am an IT Executive & Full-Stack Developer experienced in managing enterprise-level
-                                hospital information systems, database administration, and real-time troubleshooting.
-                                Strong foundation in modern frameworks, ERP solutions, and Oracle PL/SQL.
+                            <h3>Driven by Performance &amp; Scalable Engineering</h3>
+                            <p>
+                                I am an <strong>IT Executive at Peerless Hospital</strong> and a passionate <strong>Full-Stack Web Developer</strong> with extensive hands-on experience in orchestrating mission-critical hospital information architectures, complex Oracle PL/SQL database workflows, and modern web applications.
                             </p>
+                            <p>
+                                From designing responsive front-end user experiences to engineering scalable backend microservices and maintaining high-availability healthcare ERP modules, I turn technical complexity into seamless user-friendly digital experiences.
+                            </p>
+
+                            <!-- Interactive Developer Bio Terminal -->
+                            <div class="code-terminal spotlight-card" data-tilt>
+                                <div class="terminal-header">
+                                    <div class="terminal-dots">
+                                        <span class="dot dot-red"></span>
+                                        <span class="dot dot-yellow"></span>
+                                        <span class="dot dot-green"></span>
+                                    </div>
+                                    <div class="terminal-title">rupam.developer.ts</div>
+                                    <button class="terminal-copy-btn" onclick="copyTerminalCode(this)" title="Copy Code">
+                                        <i class="uil uil-copy"></i>
+                                    </button>
+                                </div>
+                                <div class="terminal-body">
+                                    <pre><code id="terminalCodeContent"><span class="code-keyword">const</span> <span class="code-var">developer</span>: <span class="code-type">DeveloperProfile</span> = {
+  <span class="code-prop">name</span>: <span class="code-str">'Rupam Mandal'</span>,
+  <span class="code-prop">role</span>: <span class="code-str">'IT Executive &amp; Full-Stack Engineer'</span>,
+  <span class="code-prop">organization</span>: <span class="code-str">'Peerless Hospital &amp; Research Centre'</span>,
+  <span class="code-prop">coreSkills</span>: [<span class="code-str">'React'</span>, <span class="code-str">'Node.js'</span>, <span class="code-str">'Oracle PL/SQL'</span>, <span class="code-str">'HMS'</span>, <span class="code-str">'MongoDB'</span>],
+  <span class="code-prop">passions</span>: [<span class="code-str">'AI-Driven Web Apps'</span>, <span class="code-str">'System Architecture'</span>, <span class="code-str">'UI/UX'</span>],
+  <span class="code-prop">status</span>: <span class="code-str">'Open to exciting opportunities &amp; challenges'</span>
+};</code></pre>
+                                </div>
+                            </div>
+
                             <div class="about-btn">
-                                <a href="./Rupam Mandal New exp.pdf"><button class="btn">Download CV <i
-                                            class="uil uil-import"></i></button></a>
+                                <a href="./Rupam Mandal New exp.pdf" target="_blank">
+                                    <button class="btn blue-btn magnetic-btn">
+                                        <span>Download Full Resume</span>
+                                        <i class="uil uil-import"></i>
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Right: Technical Stack Matrix -->
                     <div class="col skills-col">
-                        <div class="skills-box">
-                            <div class="skills-header"
-                                style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-                                <h3 style="font-size: 20px; font-weight: 600; color: #fff;">Technical Stack</h3>
+                        <div class="skills-box spotlight-card">
+                            <div class="skills-header">
+                                <div class="skills-header-icon">
+                                    <i class="uil uil-layer-group"></i>
+                                </div>
+                                <div>
+                                    <h3>Technical Matrix</h3>
+                                    <p>Technologies &amp; Frameworks in active production use</p>
+                                </div>
                             </div>
 
                             <!-- Frontend -->
                             <div class="skills-group">
-                                <h4 class="skill-category-title">Frontend</h4>
+                                <div class="skill-group-heading">
+                                    <span class="skill-category-title"><i class="uil uil-browser"></i> Frontend Engineering</span>
+                                    <span class="skill-level-pill">Advanced</span>
+                                </div>
                                 <div class="skill-tags">
-                                    <span class="tech-tag">HTML5</span>
-                                    <span class="tech-tag">CSS3</span>
-                                    <span class="tech-tag">JavaScript</span>
-                                    <span class="tech-tag">React</span>
-                                    <span class="tech-tag">Tailwind</span>
-                                    <span class="tech-tag">Bootstrap</span>
-                                    <span class="tech-tag">EJS</span>
+                                    <span class="tech-tag"><i class="uil uil-react"></i> React.js</span>
+                                    <span class="tech-tag"><i class="uil uil-java-script"></i> JavaScript ES6+</span>
+                                    <span class="tech-tag"><i class="uil uil-html5"></i> HTML5 / Semantic</span>
+                                    <span class="tech-tag"><i class="uil uil-css3-simple"></i> CSS3 / Modern Flex &amp; Grid</span>
+                                    <span class="tech-tag"><i class="uil uil-paint-tool"></i> Tailwind CSS</span>
+                                    <span class="tech-tag"><i class="uil uil-bootstrap"></i> Bootstrap 5</span>
+                                    <span class="tech-tag"><i class="uil uil-brackets-curly"></i> EJS Templates</span>
                                 </div>
                             </div>
 
-                            <!-- Backend -->
+                            <!-- Backend & Database -->
                             <div class="skills-group">
-                                <h4 class="skill-category-title">Backend & DB</h4>
+                                <div class="skill-group-heading">
+                                    <span class="skill-category-title"><i class="uil uil-server"></i> Backend &amp; Databases</span>
+                                    <span class="skill-level-pill">Expert</span>
+                                </div>
                                 <div class="skill-tags">
-                                    <span class="tech-tag">Node.js</span>
-                                    <span class="tech-tag">Express.js</span>
-                                    <span class="tech-tag">MongoDB</span>
-                                    <span class="tech-tag">Oracle PL/SQL</span>
-                                    <span class="tech-tag">SQL</span>
+                                    <span class="tech-tag"><i class="uil uil-node-js"></i> Node.js</span>
+                                    <span class="tech-tag"><i class="uil uil-server-network"></i> Express.js</span>
+                                    <span class="tech-tag"><i class="uil uil-database"></i> Oracle PL/SQL</span>
+                                    <span class="tech-tag"><i class="uil uil-database-alt"></i> MongoDB</span>
+                                    <span class="tech-tag"><i class="uil uil-table"></i> SQL / Relational DBs</span>
+                                    <span class="tech-tag"><i class="uil uil-exchange"></i> RESTful APIs</span>
                                 </div>
                             </div>
 
-                            <!-- Languages -->
+                            <!-- Hospital Systems & Programming -->
                             <div class="skills-group">
-                                <h4 class="skill-category-title">Languages</h4>
+                                <div class="skill-group-heading">
+                                    <span class="skill-category-title"><i class="uil uil-hospital"></i> Enterprise &amp; Hospital IT</span>
+                                    <span class="skill-level-pill">Specialist</span>
+                                </div>
                                 <div class="skill-tags">
-                                    <span class="tech-tag">Python</span>
-                                    <span class="tech-tag">Java</span>
-                                    <span class="tech-tag">C/C++</span>
+                                    <span class="tech-tag"><i class="uil uil-medkit"></i> HMS / HIS Implementation</span>
+                                    <span class="tech-tag"><i class="uil uil-file-medical"></i> OPD &amp; IPD Workflows</span>
+                                    <span class="tech-tag"><i class="uil uil-file-contract"></i> Oracle Forms &amp; Reports 10g</span>
+                                    <span class="tech-tag"><i class="uil uil-shield-check"></i> UAT Coordination</span>
+                                    <span class="tech-tag"><i class="uil uil-robot"></i> AI Healthcare Modules</span>
+                                </div>
+                            </div>
+
+                            <!-- Programming Languages -->
+                            <div class="skills-group">
+                                <div class="skill-group-heading">
+                                    <span class="skill-category-title"><i class="uil uil-code-branch"></i> Core Languages &amp; Tools</span>
+                                    <span class="skill-level-pill">Proficient</span>
+                                </div>
+                                <div class="skill-tags">
+                                    <span class="tech-tag"><i class="uil uil-brackets-curly"></i> Python</span>
+                                    <span class="tech-tag"><i class="uil uil-coffee"></i> Java</span>
+                                    <span class="tech-tag"><i class="uil uil-desktop"></i> C / C++</span>
+                                    <span class="tech-tag"><i class="uil uil-github"></i> Git &amp; GitHub</span>
+                                    <span class="tech-tag"><i class="uil uil-visual-studio"></i> VS Code</span>
                                 </div>
                             </div>
                         </div>
@@ -322,36 +495,84 @@
                 </div>
             </section>
 
-
             <!-- -------------- SERVICES BOX ---------------- -->
             <section class="section" id="services">
                 <div class="top-header">
-                    <h1>My Services</h1>
-                    <span>What I Provide</span>
+                    <span class="section-tag">SOLUTIONS</span>
+                    <h1>What I Provide</h1>
+                    <p class="section-subtitle">High-impact engineering tailored for businesses, healthcare &amp; startups</p>
                 </div>
+
                 <div class="project-container">
-                    <div class="service-box">
-                        <i class="uil uil-arrow"></i>
+                    <div class="service-box spotlight-card" data-tilt>
+                        <div class="service-icon-wrap">
+                            <i class="uil uil-arrow"></i>
+                        </div>
                         <div class="service-text">
-                            <h3>Web Development</h3>
-                            <p>Building responsive, high-performance websites using modern technologies like React, Node.js,
-                                and more.</p>
+                            <h3>Full-Stack Web Development</h3>
+                            <p>End-to-end development of responsive, blazing-fast web applications using React, Node.js, Express, and modern styling architectures.</p>
+                            <ul class="service-features">
+                                <li><i class="uil uil-check-circle"></i> Single Page Applications (SPA)</li>
+                                <li><i class="uil uil-check-circle"></i> RESTful API Architecture</li>
+                                <li><i class="uil uil-check-circle"></i> SEO &amp; Performance Optimized</li>
+                            </ul>
+                        </div>
+                        <div class="service-action">
+                            <a href="#contact" class="service-link">Get a Quote <i class="uil uil-arrow-right"></i></a>
                         </div>
                     </div>
-                    <div class="service-box">
-                        <i class="uil uil-laptop-cloud"></i>
+
+                    <div class="service-box spotlight-card" data-tilt>
+                        <div class="service-icon-wrap">
+                            <i class="uil uil-hospital"></i>
+                        </div>
                         <div class="service-text">
-                            <h3>Backend Systems</h3>
-                            <p>Designing robust and scalable backend architectures using Node.js, Express, and databases
-                                like MongoDB/SQL.</p>
+                            <h3>Hospital &amp; Enterprise IT Systems</h3>
+                            <p>Specialized HMS/HIS deployment, workflow mapping, patient portal modules, OPD/IPD billing setups, and production support.</p>
+                            <ul class="service-features">
+                                <li><i class="uil uil-check-circle"></i> HMS Implementation &amp; UAT</li>
+                                <li><i class="uil uil-check-circle"></i> Doctor Appointment Systems</li>
+                                <li><i class="uil uil-check-circle"></i> Clinical Master Data Setup</li>
+                            </ul>
+                        </div>
+                        <div class="service-action">
+                            <a href="#contact" class="service-link">Consult System <i class="uil uil-arrow-right"></i></a>
                         </div>
                     </div>
-                    <div class="service-box">
-                        <i class="uil uil-palette"></i>
+
+                    <div class="service-box spotlight-card" data-tilt>
+                        <div class="service-icon-wrap">
+                            <i class="uil uil-database"></i>
+                        </div>
                         <div class="service-text">
-                            <h3>UI/UX Design</h3>
-                            <p>Creating intuitive and visually stunning user interfaces with a focus on user experience and
-                                accessibility.</p>
+                            <h3>Database &amp; Oracle Solutions</h3>
+                            <p>Complex SQL query optimization, Oracle PL/SQL stored procedures, triggers, data analytics reports, and database migrations.</p>
+                            <ul class="service-features">
+                                <li><i class="uil uil-check-circle"></i> Oracle PL/SQL &amp; 10g Forms</li>
+                                <li><i class="uil uil-check-circle"></i> Database Indexing &amp; Tuning</li>
+                                <li><i class="uil uil-check-circle"></i> Custom MIS Reports</li>
+                            </ul>
+                        </div>
+                        <div class="service-action">
+                            <a href="#contact" class="service-link">Optimize DB <i class="uil uil-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="service-box spotlight-card" data-tilt>
+                        <div class="service-icon-wrap">
+                            <i class="uil uil-robot"></i>
+                        </div>
+                        <div class="service-text">
+                            <h3>AI Chatbot &amp; Automation</h3>
+                            <p>Custom intelligent AI assistant widgets, LLM API integrations (Llama, OpenAI, Gemini), voice-enabled chatbots, and automated workflows.</p>
+                            <ul class="service-features">
+                                <li><i class="uil uil-check-circle"></i> LLM Assistant Integration</li>
+                                <li><i class="uil uil-check-circle"></i> Voice-to-Text &amp; Speech</li>
+                                <li><i class="uil uil-check-circle"></i> Lead Generation Automation</li>
+                            </ul>
+                        </div>
+                        <div class="service-action">
+                            <a href="#contact" class="service-link">Integrate AI <i class="uil uil-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
@@ -360,24 +581,46 @@
             <!-- -------------- CERTIFICATIONS ---------------- -->
             <section class="section" id="certifications">
                 <div class="top-header">
-                    <h1>Certifications</h1>
-                    <span>My Achievements</span>
+                    <span class="section-tag">CREDENTIALS</span>
+                    <h1>Certifications &amp; Honors</h1>
+                    <p class="section-subtitle">Verified professional credentials &amp; specialized trainings</p>
                 </div>
+
                 <div class="project-container">
-                    <div class="certification-box">
-                        <i class="uil uil-award"></i>
+                    <div class="certification-box spotlight-card" data-tilt>
+                        <div class="cert-icon-wrap">
+                            <i class="uil uil-award"></i>
+                        </div>
+                        <span class="cert-issuer">Oracle University</span>
                         <h3>Oracle Certified Associate</h3>
-                        <p>Database Administrator certification demonstrating expertise in Oracle databases.</p>
+                        <p>Specialized database administration certification demonstrating profound expertise in Oracle architecture, SQL queries, and PL/SQL procedures.</p>
+                        <div class="cert-badge-footer">
+                            <span class="cert-status"><i class="uil uil-check"></i> Verified Credential</span>
+                        </div>
                     </div>
-                    <div class="certification-box">
-                        <i class="uil uil-graduation-cap"></i>
+
+                    <div class="certification-box spotlight-card" data-tilt>
+                        <div class="cert-icon-wrap">
+                            <i class="uil uil-graduation-cap"></i>
+                        </div>
+                        <span class="cert-issuer">Advanced Tech Academy</span>
                         <h3>Full-Stack Web Development</h3>
-                        <p>Completed comprehensive training in modern web technologies and frameworks.</p>
+                        <p>Comprehensive professional training covering frontend architecture, asynchronous Node.js servers, state management, REST APIs, and database design.</p>
+                        <div class="cert-badge-footer">
+                            <span class="cert-status"><i class="uil uil-check"></i> Certified Developer</span>
+                        </div>
                     </div>
-                    <div class="certification-box">
-                        <i class="uil uil-server"></i>
+
+                    <div class="certification-box spotlight-card" data-tilt>
+                        <div class="cert-icon-wrap">
+                            <i class="uil uil-server-network"></i>
+                        </div>
+                        <span class="cert-issuer">Healthcare Informatics</span>
                         <h3>Hospital Information Systems</h3>
-                        <p>Specialized training in HIS deployment and management.</p>
+                        <p>Specialized training in end-to-end HMS deployment, clinic management, healthcare data privacy standards, and patient lifecycle software workflows.</p>
+                        <div class="cert-badge-footer">
+                            <span class="cert-status"><i class="uil uil-check"></i> HIS Specialist</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -385,266 +628,325 @@
             <!-- -------------- TOOLS & TECHNOLOGIES ---------------- -->
             <section class="section" id="tools">
                 <div class="top-header">
-                    <h1>Tools & Technologies</h1>
-                    <span>What I Use</span>
+                    <span class="section-tag">ECOSYSTEM</span>
+                    <h1>Tools &amp; Technologies</h1>
+                    <p class="section-subtitle">The software, libraries, and dev tools I use daily</p>
                 </div>
+
                 <div class="tools-container">
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-html5"></i>
                         <span>HTML5</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-css3-simple"></i>
                         <span>CSS3</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-java-script"></i>
                         <span>JavaScript</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-react"></i>
                         <span>React</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-node-js"></i>
                         <span>Node.js</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-database"></i>
                         <span>MongoDB</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-database-alt"></i>
                         <span>SQL</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-github"></i>
                         <span>GitHub</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-visual-studio"></i>
                         <span>VS Code</span>
                     </div>
-                    <div class="tool-item">
+                    <div class="tool-item spotlight-card" data-tilt>
                         <i class="uil uil-cloud-database-tree"></i>
                         <span>Oracle</span>
+                    </div>
+                    <div class="tool-item spotlight-card" data-tilt>
+                        <i class="uil uil-brackets-curly"></i>
+                        <span>Python</span>
+                    </div>
+                    <div class="tool-item spotlight-card" data-tilt>
+                        <i class="uil uil-shield-check"></i>
+                        <span>Postman</span>
                     </div>
                 </div>
             </section>
 
-
-
-            <!-- -------------- EXPERIENCE SECTION (MODERN) ---------------- -->
+            <!-- -------------- EXPERIENCE SECTION (MODERN LASER TIMELINE) ---------------- -->
             <section class="section" id="experience">
                 <div class="top-header">
-                    <h1>Experience</h1>
-                    <span>My professional journey</span>
+                    <span class="section-tag">CAREER JOURNEY</span>
+                    <h1>Professional Experience</h1>
+                    <p class="section-subtitle">Real-world production engineering &amp; enterprise support</p>
                 </div>
+
                 <div class="experience-container">
-                    <div class="timeline">
+                    <div class="timeline" id="experienceTimeline">
+                        <div class="timeline-progress-laser" id="timelineLaser"></div>
+
                         <div class="timeline-item">
-                            <div class="timeline-marker"></div>
+                            <div class="timeline-marker">
+                                <span class="marker-dot"></span>
+                            </div>
                             <div class="timeline-content" data-tilt>
-                                <div class="experience-card">
+                                <div class="experience-card spotlight-card">
+                                    <div class="experience-badge-row">
+                                        <span class="exp-role-badge">Current Role</span>
+                                        <span class="duration"><i class="uil uil-calendar-alt"></i> Dec 2024 – Present</span>
+                                    </div>
                                     <div class="experience-header">
                                         <h3>Executive – IT Department</h3>
-                                        <span class="company">Peerless Hospitex Hospital & Research Centre Ltd.,
-                                            Kolkata</span>
-                                        <span class="duration">Dec 2024 – Present</span>
+                                        <span class="company"><i class="uil uil-building"></i> Peerless Hospitex Hospital &amp; Research Centre Ltd., Kolkata</span>
                                     </div>
                                     <div class="experience-details">
                                         <ul>
-                                            <li>Actively involved in end-to-end implementation of a new Hospital
-                                                Management System (HMS), including requirement gathering, workflow
-                                                mapping, UAT coordination, and Go-Live support in a multi-speciality
-                                                hospital environment.</li>
-                                            <li>Configured and maintained HMS master data such as doctor profiles,
-                                                department setup, service/procedure masters, tariff & rate updates, and
-                                                user role mappings to ensure accurate billing and clinical workflows.
+                                            <li>
+                                                <strong>HMS Implementation &amp; Go-Live:</strong> Actively driving end-to-end implementation of the new Hospital Management System (HMS), including requirement gathering, clinical workflow mapping, UAT coordination, and Go-Live support in a multi-speciality hospital environment.
                                             </li>
-                                            <li>Developed, customized, and enhanced HMS/HIS functionalities to
-                                                streamline OPD, appointment scheduling, consultation, and administrative
-                                                operations.</li>
-                                            <li>Analyzed, diagnosed, and resolved data filtering, sorting, and reporting
-                                                issues, improving system performance and end-user satisfaction.
+                                            <li>
+                                                <strong>Master Data Governance:</strong> Configured and maintaining critical HMS master records (doctor schedules, departmental structures, tariff rates, service codes, and role-based permissions) ensuring flawless billing and clinical throughput.
                                             </li>
-
-                                            <li>Provided real-time production support and end-user training to doctors,
-                                                nurses, front-desk, billing, and administrative teams during system
-                                                rollout and daily operations.</li>
-                                            <li>Created, customized, and maintained Oracle Forms & Reports (10g) using
-                                                Oracle PL/SQL to support ERP integration, MIS reporting, and operational
-                                                analytics.</li>
-                                            <li>Designed and implemented supporting web-based modules using HTML, CSS,
-                                                JavaScript, and SQL to extend HMS functionality.</li>
-                                            <li>Supported AI-enabled modules and digital tools for patient interaction,
-                                                data insights, and operational assistance, aligning hospital workflows
-                                                with modern health-tech practices.</li>
-                                            <li>Performed ongoing system maintenance, enhancement, and new feature
-                                                development in coordination with software vendors and hospital
-                                                stakeholders.</li>
+                                            <li>
+                                                <strong>Oracle PL/SQL &amp; Reports 10g:</strong> Developing, enhancing, and maintaining customized Oracle PL/SQL queries, packages, and Oracle Reports for ERP integration, MIS analytics, and revenue cycle monitoring.
+                                            </li>
+                                            <li>
+                                                <strong>Custom Web Modules:</strong> Designing supporting web-based extensions and modules using React, JavaScript, HTML5, CSS3, and SQL to streamline front-desk OPD reservations and consultation queues.
+                                            </li>
+                                            <li>
+                                                <strong>AI &amp; Digital Tooling:</strong> Supported AI-enabled modules for patient interaction, predictive data insights, and digital operational assistance aligning hospital workflows with modern health-tech best practices.
+                                            </li>
+                                            <li>
+                                                <strong>24/7 Production Support:</strong> Providing prompt technical troubleshooting, issue diagnosis, and user training to clinicians, nurses, billing officers, and administrative stakeholders.
+                                            </li>
                                         </ul>
+                                    </div>
+                                    <div class="exp-tech-tags">
+                                        <span>Hospital IT (HMS)</span>
+                                        <span>Oracle PL/SQL</span>
+                                        <span>Oracle Forms 10g</span>
+                                        <span>JavaScript</span>
+                                        <span>SQL Tuning</span>
+                                        <span>AI Modules</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Add more timeline items here if needed -->
                     </div>
                 </div>
             </section>
+
             <!-- -------------- STATS ---------------- -->
             <section class="section" id="stats">
                 <div class="stats-container">
-                    <div class="stat-item">
-                        <h2 class="stat-number" data-target="10+">0</h2>
+                    <div class="stat-item spotlight-card" data-tilt>
+                        <div class="stat-icon-wrap"><i class="uil uil-check-circle"></i></div>
+                        <h2 class="stat-number" data-target="12">0</h2>
                         <p>Projects Completed</p>
                     </div>
-                    <div class="stat-item">
+
+                    <div class="stat-item spotlight-card" data-tilt>
+                        <div class="stat-icon-wrap"><i class="uil uil-clock"></i></div>
                         <h2 id="stats-exp-num">0</h2>
-                        <p>Experience</p>
-                        <div id="stats-exp-detail" style="font-size: 0.75rem; color: var(--c); font-weight: 700; margin-top: 8px; letter-spacing: 0.05em;">Counting...</div>
+                        <p>Total Experience</p>
+                        <div id="stats-exp-detail" class="stats-live-detail">Counting...</div>
                     </div>
-                    <div class="stat-item">
-                        <h2 class="stat-number" data-target="5">0</h2>
+
+                    <div class="stat-item spotlight-card" data-tilt>
+                        <div class="stat-icon-wrap"><i class="uil uil-smile"></i></div>
+                        <h2 class="stat-number" data-target="10">0</h2>
                         <p>Happy Clients</p>
                     </div>
-                    <div class="stat-item">
+
+                    <div class="stat-item spotlight-card" data-tilt>
+                        <div class="stat-icon-wrap"><i class="uil uil-award"></i></div>
                         <h2 class="stat-number" data-target="5">0</h2>
                         <p>Certifications</p>
                     </div>
                 </div>
             </section>
-            <!-- -------------- PROJECT BOX ---------------- -->
 
+            <!-- -------------- PROJECT BOX ---------------- -->
             <section class="section" id="projects">
                 <div class="top-header">
-                    <h1>Projects</h1>
-                    <span>My recent works</span>
+                    <span class="section-tag">PORTFOLIO</span>
+                    <h1>Featured Projects</h1>
+                    <p class="section-subtitle">Showcase of web apps, software systems, and interactive interfaces</p>
                 </div>
 
                 <!-- Project Filter Buttons -->
                 <div class="project-filter">
-                    <button class="filter-btn active-filter" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="web">Web Dev</button>
-                    <button class="filter-btn" data-filter="app">App Dev</button>
-                    <button class="filter-btn" data-filter="design">Design</button>
+                    <button class="filter-btn active-filter" data-filter="all">All Projects</button>
+                    <button class="filter-btn" data-filter="web">Web Applications</button>
+                    <button class="filter-btn" data-filter="app">Hospital / Enterprise</button>
+                    <button class="filter-btn" data-filter="design">UI/UX &amp; Clones</button>
                 </div>
 
                 <div class="project-container">
-                    <!-- Projects are dynamically loaded from database -->
+                    <!-- Projects are dynamically loaded or fallback populated -->
                 </div>
             </section>
 
             <!-- -------------- CONTACT BOX ---------------- -->
-
             <section class="section" id="contact">
                 <div class="top-header">
-                    <h1>Get in touch</h1>
-                    <span>Do you have a project in your mind? Contact me here</span>
+                    <span class="section-tag">CONNECT</span>
+                    <h1>Get In Touch</h1>
+                    <p class="section-subtitle">Have a project idea, inquiry, or opportunity? Let's build something remarkable together</p>
                 </div>
+
                 <div class="contact-container">
-                    <div class="contact-info-card" data-tilt>
-                        <h3>Contact Information</h3>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="uil uil-envelope"></i>
+                    <!-- Contact Info Card -->
+                    <div class="contact-info-card spotlight-card" data-tilt>
+                        <div class="contact-card-header">
+                            <h3>Let's Talk Business</h3>
+                            <p>Feel free to reach out directly via email, phone, or LinkedIn. I am always open to discussing new projects, creative ideas, or engineering opportunities.</p>
+                        </div>
+
+                        <div class="contact-items-list">
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="uil uil-envelope-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h4>Email Address</h4>
+                                    <p>rupammandal240@gmail.com</p>
+                                    <a href="mailto:rupammandal240@gmail.com" class="contact-link">Send Email Direct <i class="uil uil-arrow-up-right"></i></a>
+                                </div>
                             </div>
-                            <div class="contact-details">
-                                <h4>Email</h4>
-                                <p>rupammandal240@gmail.com</p>
-                                <a href="mailto:rupammandal240@gmail.com" class="contact-link">Send Email</a>
+
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="uil uil-phone-volume"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h4>Phone / WhatsApp</h4>
+                                    <p>+91 93315 82*** (Available)</p>
+                                    <a href="tel:+91931582" class="contact-link">Call Direct <i class="uil uil-arrow-up-right"></i></a>
+                                </div>
+                            </div>
+
+                            <div class="contact-item">
+                                <div class="contact-icon">
+                                    <i class="uil uil-map-marker-alt"></i>
+                                </div>
+                                <div class="contact-details">
+                                    <h4>Location</h4>
+                                    <p>Kolkata, West Bengal, India</p>
+                                    <span class="contact-subtext">Open to Remote Worldwide</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">
-                                <i class="uil uil-phone"></i>
-                            </div>
-                            <div class="contact-details">
-                                <h4>Phone</h4>
-                                <p>+91 9*3*1*5*8*2</p>
-                                <a href="tel:+91931582" class="contact-link">Call Now</a>
-                            </div>
+
+                        <div class="contact-social-bar">
+                            <a href="https://github.com/Rupamwebsite" target="_blank" rel="noopener noreferrer" class="contact-soc-btn" aria-label="GitHub"><i class="uil uil-github-alt"></i></a>
+                            <a href="https://www.linkedin.com/in/rupam-mandal-07755325b" target="_blank" rel="noopener noreferrer" class="contact-soc-btn" aria-label="LinkedIn"><i class="uil uil-linkedin-alt"></i></a>
+                            <a href="https://www.instagram.com/rupam.mandal.71404/" target="_blank" rel="noopener noreferrer" class="contact-soc-btn" aria-label="Instagram"><i class="uil uil-instagram"></i></a>
                         </div>
                     </div>
-                    <div class="contact-form-card" data-tilt>
-                        <h3>Send Message</h3>
+
+                    <!-- Contact Form Card -->
+                    <div class="contact-form-card spotlight-card" data-tilt>
+                        <div class="form-card-header">
+                            <h3>Send a Direct Message</h3>
+                            <p>Fill out this form and I will respond to your email within 24 hours.</p>
+                        </div>
+
                         <form id="contact-form" onsubmit="handleContactForm(event)">
-                            <div class="form-group">
-                                <input type="text" name="name" placeholder="Your Name" required>
+                            <div class="form-row">
+                                <div class="form-group floating-group">
+                                    <input type="text" name="name" id="formName" placeholder=" " required>
+                                    <label for="formName">Your Full Name</label>
+                                    <i class="uil uil-user form-field-icon"></i>
+                                </div>
+                                <div class="form-group floating-group">
+                                    <input type="email" name="email" id="formEmail" placeholder=" " required>
+                                    <label for="formEmail">Your Email Address</label>
+                                    <i class="uil uil-envelope form-field-icon"></i>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <input type="email" name="email" placeholder="Your Email" required>
+
+                            <div class="form-group floating-group">
+                                <input type="tel" name="phone" id="formPhone" placeholder=" ">
+                                <label for="formPhone">Phone Number (Optional)</label>
+                                <i class="uil uil-phone form-field-icon"></i>
                             </div>
-                            <div class="form-group">
-                                <input type="text" name="phone" placeholder="Your Phone" required>
+
+                            <div class="form-group floating-group">
+                                <textarea name="message" id="formMsg" placeholder=" " required></textarea>
+                                <label for="formMsg">Tell me about your project, timeline &amp; goals...</label>
+                                <i class="uil uil-comment-alt-lines form-field-icon"></i>
                             </div>
-                            <div class="form-group">
-                                <textarea name="message" placeholder="Your Message" required></textarea>
-                            </div>
-                            <button type="submit" class="btn send-btn">Send Message <i
-                                    class="uil uil-message"></i></button>
+
+                            <button type="submit" class="btn send-btn magnetic-btn">
+                                <span>Transmit Message</span>
+                                <i class="uil uil-message"></i>
+                            </button>
                         </form>
                     </div>
                 </div>
             </section>
         </main>
 
-
         <!-- --------------- FOOTER --------------- -->
         <footer>
-            <div class="top-footer">
-                <p>Rupam Mandal</p>
-            </div>
-            <div class="middle-footer">
-                <ul class="footer-menu">
-                    <li class="footer_menu_list">
-                        <a href="#home">Home</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#about">About</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#stats">Stats</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#services">Services</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#certifications">Certifications</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#tools">Tools</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#projects">Projects</a>
-                    </li>
-                    <li class="footer_menu_list">
-                        <a href="#contact">Contact</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="footer-social-icons">
-                <div class="icon"><a href="https://www.instagram.com/rupam.mandal.71404/"><i
-                            class="uil uil-instagram"></i></a></div>
-                <div class="icon"><a href="https://www.linkedin.com/in/rupam-mandal-07755325b"><i
-                            class="uil uil-linkedin-alt"></i></a></div>
-                <div class="icon"><a href="https://github.com/Rupamwebsite"><i class="uil uil-github-alt"></i></a></div>
-            </div>
-            <div class="bottom-footer">
-                <p>Copyright &copy; <a href="#home">Rupam Mandal</a> - All rights reserved</p>
+            <div class="footer-inner">
+                <div class="top-footer">
+                    <div class="footer-logo">
+                        <span class="footer-logo-badge">RM</span>
+                        <span class="footer-name">Rupam Mandal</span>
+                    </div>
+                    <p class="footer-tagline">Architecting high-performance digital solutions &amp; enterprise healthcare software.</p>
+                </div>
+
+                <div class="middle-footer">
+                    <ul class="footer-menu">
+                        <li class="footer_menu_list"><a href="#home">Home</a></li>
+                        <li class="footer_menu_list"><a href="#about">About</a></li>
+                        <li class="footer_menu_list"><a href="#services">Services</a></li>
+                        <li class="footer_menu_list"><a href="#certifications">Certifications</a></li>
+                        <li class="footer_menu_list"><a href="#tools">Tools</a></li>
+                        <li class="footer_menu_list"><a href="#experience">Experience</a></li>
+                        <li class="footer_menu_list"><a href="#stats">Stats</a></li>
+                        <li class="footer_menu_list"><a href="#projects">Projects</a></li>
+                        <li class="footer_menu_list"><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-social-icons">
+                    <div class="icon"><a href="https://github.com/Rupamwebsite" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="uil uil-github-alt"></i></a></div>
+                    <div class="icon"><a href="https://www.linkedin.com/in/rupam-mandal-07755325b" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="uil uil-linkedin-alt"></i></a></div>
+                    <div class="icon"><a href="https://www.instagram.com/rupam.mandal.71404/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="uil uil-instagram"></i></a></div>
+                    <div class="icon"><a href="mailto:rupammandal240@gmail.com" aria-label="Email"><i class="uil uil-envelope-check"></i></a></div>
+                </div>
+
+                <div class="bottom-footer">
+                    <p>Designed &amp; Engineered with <span class="heart-pulse">❤️</span> by <a href="#home">Rupam Mandal</a> &copy; 2026. All rights reserved.</p>
+                </div>
             </div>
         </footer>
 
         <!-- Back to Top Button -->
-        <a href="#home" class="back-to-top" id="backToTop">
+        <a href="#home" class="back-to-top" id="backToTop" aria-label="Back to top">
             <i class="uil uil-arrow-up"></i>
         </a>
-
     </div>
 
     <!-- ============ AI CHATBOT WIDGET — APEX ADVANCED ============ -->
     <!-- Floating Chat Button -->
-    <button class="chatbot-fab" id="chatbotFab" aria-label="Open AI Chat">
+    <button class="chatbot-fab" id="chatbotFab" aria-label="Open AI Assistant Apex">
         <div class="chatbot-fab-icon" id="chatbotFabIcon">
             <i class="uil uil-robot"></i>
         </div>
@@ -656,7 +958,6 @@
 
     <!-- Chat Panel -->
     <div class="chatbot-panel" id="chatbotPanel" aria-hidden="true">
-
         <!-- Header -->
         <div class="chatbot-header">
             <div class="chatbot-header-info">
@@ -666,17 +967,17 @@
                 </div>
                 <div class="chatbot-header-text">
                     <h4>Apex <span class="chatbot-model-badge">Llama 3.3 70B</span></h4>
-                    <span id="chatbotStatusText">Online · Ready to help</span>
+                    <span id="chatbotStatusText">Online · Rupam's AI</span>
                 </div>
             </div>
             <div class="chatbot-header-actions">
                 <button class="chatbot-voice-btn" id="chatbotVoice" title="Toggle Voice Output">
                     <i class="uil uil-volume"></i>
                 </button>
-                <button class="chatbot-export-btn" id="chatbotExport" title="Export Chat">
+                <button class="chatbot-export-btn" id="chatbotExport" title="Export Chat Transcript">
                     <i class="uil uil-file-download-alt"></i>
                 </button>
-                <button class="chatbot-clear-btn" id="chatbotClear" title="Clear chat">
+                <button class="chatbot-clear-btn" id="chatbotClear" title="Clear Conversation">
                     <i class="uil uil-trash-alt"></i>
                 </button>
                 <button class="chatbot-close-btn" id="chatbotClose" title="Close">
@@ -692,12 +993,12 @@
                 <div class="chatbot-msg-avatar"><i class="uil uil-robot"></i></div>
                 <div class="chatbot-msg-bubble">
                     <div class="bot-msg-content">
-                        <p>Hi, I'm <strong>Apex</strong> 👋 Rupam Mandal's personal AI assistant.</p>
-                        <p>I'm here to help you explore his skills, projects, and services instantly. If you need a website, software, or custom solution, feel free to ask!</p>
+                        <p>Hi there! I'm <strong>Apex</strong> 👋 Rupam Mandal's personal AI representative.</p>
+                        <p>Ask me anything about Rupam's <strong>technical skills</strong>, <strong>hospital software (HMS) experience</strong>, <strong>projects</strong>, or how to collaborate!</p>
                     </div>
                     <div class="chatbot-msg-footer">
                         <span class="chatbot-msg-time">Just now</span>
-                        <button class="msg-copy-btn" title="Copy" onclick="copyMessage(this)"><i class="uil uil-copy"></i></button>
+                        <button class="msg-copy-btn" title="Copy Message" onclick="copyMessage(this)"><i class="uil uil-copy"></i></button>
                     </div>
                 </div>
             </div>
@@ -706,7 +1007,7 @@
         <!-- Quick Suggestions -->
         <div class="chatbot-suggestions" id="chatbotSuggestions">
             <button class="chatbot-chip" data-msg="What are Rupam's technical skills?">🛠️ Skills</button>
-            <button class="chatbot-chip" data-msg="Tell me about Rupam's work experience.">💼 Experience</button>
+            <button class="chatbot-chip" data-msg="Tell me about Rupam's work experience at Peerless Hospital.">💼 Experience</button>
             <button class="chatbot-chip" data-msg="What projects has Rupam built?">🚀 Projects</button>
             <button class="chatbot-chip" data-msg="How can I hire or contact Rupam?">📞 Hire Rupam</button>
         </div>
@@ -716,8 +1017,7 @@
             <button class="chatbot-mic-btn" id="chatbotMic" title="Voice Input" aria-label="Voice input">
                 <i class="uil uil-microphone"></i>
             </button>
-            <textarea class="chatbot-input" id="chatbotInput" placeholder="Message Apex..." rows="1"
-                maxlength="1000" aria-label="Chat input"></textarea>
+            <textarea class="chatbot-input" id="chatbotInput" placeholder="Ask Apex anything..." rows="1" maxlength="1000" aria-label="Chat input"></textarea>
             <button class="chatbot-send-btn" id="chatbotSend" aria-label="Send message">
                 <i class="uil uil-message"></i>
             </button>
@@ -728,45 +1028,23 @@
 
         <!-- Footer Info -->
         <div class="chatbot-panel-footer">
-            <span>Powered by <strong>Rupam</strong> · Responses may be inaccurate</span>
+            <span>Powered by <strong>Llama 3.3</strong> · Rupam Mandal AI</span>
         </div>
-
     </div>
 
-
-    <!-- Notification Modal -->
+    <!-- Notification Modal Toast -->
     <div id="notify-modal" class="notify-modal" aria-hidden="true">
         <div class="notify-modal-content">
             <button class="notify-close" aria-label="Close notification">&times;</button>
             <div class="notify-icon" aria-hidden="true"><i class="uil uil-check-circle"></i></div>
-            <h3 class="notify-title">Message</h3>
+            <h3 class="notify-title">Notification</h3>
             <p class="notify-message">&nbsp;</p>
         </div>
     </div>
 
-    <!-- ----- TYPING JS Link ----- -->
-    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-
-    <!-- ----- SCROLL REVEAL JS Link----- -->
-    <script src="https://unpkg.com/scrollreveal"></script>
-
-
-    <!-- ----- VANILLA TILT JS Link ----- -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
-
-    <!-- ----- EMAILJS SDK ----- -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-    <script type="text/javascript">
-        (function () {
-            emailjs.init({
-                publicKey: "SkLbjpPjp2hbH9O48",
-            });
-        })();
-    </script>
-
     <!-- Project Modal Popup -->
     <div class="project-modal" id="projectModal">
-        <div class="project-modal-content">
+        <div class="project-modal-content spotlight-card">
             <button class="project-modal-close" onclick="closeProjectModal()">&times;</button>
             <div class="project-modal-icon">
                 <i class="uil uil-briefcase"></i>
@@ -774,66 +1052,69 @@
             <h3 id="modalProjectTitle">Project Title</h3>
             <p id="modalProjectDescription">Project description goes here</p>
             <div class="project-modal-status">
-                <strong>Status:</strong> Development in progress - Coming soon!
+                <strong>Status:</strong> Enterprise System — Production / Live Demo
             </div>
         </div>
     </div>
 
-    <!-- ----- MAIN JS ----- -->
-    <script src="./portfolio.js?v=3.0"></script>
-    <script src="./chatbot-apex.js?v=1.0"></script>
-
-    <!-- DIRECT PROJECT INJECTION -->
+    <!-- ----- EXTERNAL SCRIPTS & LIBRARIES ----- -->
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
-        // Modal functions
+        (function () {
+            if (typeof emailjs !== 'undefined') {
+                emailjs.init({ publicKey: "SkLbjpPjp2hbH9O48" });
+            }
+        })();
+    </script>
+
+    <!-- ----- MAIN JAVASCRIPT MODULES ----- -->
+    <script src="./portfolio.js?v=4.5"></script>
+    <script src="./chatbot-apex.js?v=4.5"></script>
+
+    <!-- Modal helper & Copy code snippet -->
+    <script>
         function openProjectModal(title, description) {
-            document.getElementById('modalProjectTitle').textContent = title;
-            document.getElementById('modalProjectDescription').textContent = description;
-            document.getElementById('projectModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
+            const tEl = document.getElementById('modalProjectTitle');
+            const dEl = document.getElementById('modalProjectDescription');
+            const mEl = document.getElementById('projectModal');
+            if (tEl && dEl && mEl) {
+                tEl.textContent = title;
+                dEl.textContent = description;
+                mEl.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
         }
 
         function closeProjectModal() {
-            document.getElementById('projectModal').classList.remove('active');
-            document.body.style.overflow = 'auto';
+            const mEl = document.getElementById('projectModal');
+            if (mEl) {
+                mEl.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
         }
 
-        window.addEventListener('load', () => {
-            const container = document.querySelector('#projects .project-container');
-            if (container) {
-                container.innerHTML = `
-                    <a href="https://rmeducation.vercel.app/" target="_blank" class="project-box" data-category="web">
-                        <i class="uil uil-folder"></i>
-                        <h3>LMS with AI Integration</h3>
-                        <label>AI-Integrated learning management system for student education and progress tracking.</label>
-                    </a>
-                    <a href="#" onclick="event.preventDefault(); openProjectModal('Advanced Doctor Appointment & HMS', 'Hospital Management System with AI integration for doctor appointments and patient records.')" class="project-box" data-category="web">
-                        <i class="uil uil-folder"></i>
-                        <h3>Advanced Doctor Appointment & HMS</h3>
-                        <label>Hospital Management System with AI integration for doctor appointments and patient records.</label>
-                    </a>
-                    <a href="https://rupam.co.in" target="_blank" class="project-box" data-category="web">
-                        <i class="uil uil-folder"></i>
-                        <h3>Personal Portfolio</h3>
-                        <label>Premium personal portfolio website with interactive 3D effects and animations.</label>
-                    </a>
-                    <a href="#" onclick="event.preventDefault(); openProjectModal('Spotify Website', 'High-fidelity UI clone of Spotify music streaming platform.')" class="project-box" data-category="design">
-                        <i class="uil uil-folder"></i>
-                        <h3>Spotify Website</h3>
-                        <label>High-fidelity UI clone of Spotify music streaming platform.</label>
-                    </a>
-                `;
+        function copyTerminalCode(btn) {
+            const codeEl = document.getElementById('terminalCodeContent');
+            if (codeEl) {
+                navigator.clipboard.writeText(codeEl.innerText).then(() => {
+                    const original = btn.innerHTML;
+                    btn.innerHTML = '<i class="uil uil-check" style="color:#00f2fe;"></i>';
+                    setTimeout(() => { btn.innerHTML = original; }, 2000);
+                });
+            }
+        }
 
-                // Close modal when clicking outside
-                document.getElementById('projectModal').addEventListener('click', (e) => {
-                    if (e.target.id === 'projectModal') {
-                        closeProjectModal();
-                    }
+        // Close modal on outside click
+        window.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('projectModal');
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) closeProjectModal();
                 });
             }
         });
     </script>
-
 </body>
-
 </html>
