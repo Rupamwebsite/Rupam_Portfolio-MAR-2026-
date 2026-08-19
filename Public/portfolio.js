@@ -31,29 +31,65 @@ document.addEventListener('DOMContentLoaded', () => {
 function initPreloader() {
     const loader = document.getElementById('pre_loader');
     const barFill = document.getElementById('loader_bar_fill');
+    const percentEl = document.getElementById('loader_percent');
+    const statusTxt = document.getElementById('loader_status_txt');
     if (!loader) return;
 
     let isDone = false;
     const startTime = performance.now();
-    const duration = 280; // Ultra-snappy 280ms fluid reveal
+    const duration = 1300; // Satisfying 1.3s duration
+
+    const statusMap = [
+        { t: 0, msg: 'INITIALIZING SYSTEM...' },
+        { t: 30, msg: 'CALIBRATING NEURAL CORE...' },
+        { t: 65, msg: 'LOADING KNOWLEDGE BASES...' },
+        { t: 90, msg: 'ACCESS GRANTED // SYSTEM ONLINE' }
+    ];
+
+    let lastIdx = -1;
 
     function dismiss() {
         if (isDone) return;
         isDone = true;
         if (barFill) barFill.style.width = '100%';
-        requestAnimationFrame(() => {
-            loader.classList.add('hidden');
-            setTimeout(() => {
-                loader.style.display = 'none';
-            }, 350);
-        });
+        if (percentEl) percentEl.textContent = '100%';
+        if (statusTxt) statusTxt.textContent = 'ACCESS GRANTED // WELCOME';
+
+        setTimeout(() => {
+            requestAnimationFrame(() => {
+                loader.classList.add('hidden');
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                }, 350);
+            });
+        }, 120);
     }
 
     function step(now) {
         if (isDone) return;
         const elapsed = now - startTime;
         const ratio = Math.min(elapsed / duration, 1);
-        if (barFill) barFill.style.width = `${Math.round(ratio * 100)}%`;
+
+        // Smooth cubic easing
+        const eased = ratio < 0.5 
+            ? 4 * ratio * ratio * ratio 
+            : 1 - Math.pow(-2 * ratio + 2, 3) / 2;
+
+        const val = Math.min(100, Math.round(eased * 100));
+
+        if (barFill) barFill.style.width = `${val}%`;
+        if (percentEl) percentEl.textContent = `${val}%`;
+
+        if (statusTxt) {
+            let curIdx = 0;
+            for (let i = 0; i < statusMap.length; i++) {
+                if (val >= statusMap[i].t) curIdx = i;
+            }
+            if (curIdx !== lastIdx) {
+                lastIdx = curIdx;
+                statusTxt.textContent = statusMap[curIdx].msg;
+            }
+        }
 
         if (ratio < 1) {
             requestAnimationFrame(step);
@@ -63,8 +99,7 @@ function initPreloader() {
     }
 
     requestAnimationFrame(step);
-    window.addEventListener('load', () => setTimeout(dismiss, 50));
-    setTimeout(dismiss, 600);
+    setTimeout(dismiss, 1600);
 }
 
 /* ================================================================

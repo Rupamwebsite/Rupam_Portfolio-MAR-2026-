@@ -443,14 +443,20 @@ body.cursor-hover .custom-cursor-dot {
   text-transform: uppercase;
 }
 
+.loader-progress-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
 .loader-line-track {
-  width: 140px;
-  height: 3px;
+  width: 150px;
+  height: 4px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
   overflow: hidden;
   position: relative;
-  margin-top: 4px;
 }
 
 .loader-line-bar {
@@ -461,13 +467,17 @@ body.cursor-hover .custom-cursor-dot {
   width: 0%;
   background: linear-gradient(90deg, #00f2fe 0%, #3b82f6 50%, #a855f7 100%);
   border-radius: 999px;
-  box-shadow: 0 0 10px rgba(0, 242, 254, 0.8);
-  transition: width 0.08s ease-out;
+  box-shadow: 0 0 12px rgba(0, 242, 254, 0.8);
+  transition: width 0.05s ease-out;
 }
-.hud-coordinates {
+
+.loader-percent {
   font-family: var(--t-mono);
-  font-size: 0.6rem;
-  color: rgba(148, 163, 184, 0.65);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--c);
+  min-width: 36px;
+  text-align: right;
 }
 
 /* ================================================================
