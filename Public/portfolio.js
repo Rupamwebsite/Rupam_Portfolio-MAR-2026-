@@ -255,21 +255,85 @@ function handleContactForm(e) {
     return false;
 }
 
-/* ----- PRELOADER ----- */
-function hidePreloader() {
+/* ----- PRELOADER: FAST HIGH-PERFORMANCE SEQUENCER ----- */
+(function initPreloader() {
     var loader = document.getElementById('pre_loader');
-    if (loader) {
-        loader.classList.add('hidden');
-        setTimeout(function () {
-            loader.style.display = 'none';
-        }, 700);
+    var percentEl = document.getElementById('loader_percent');
+    var barFill = document.getElementById('loader_bar_fill');
+    var statusTxt = document.getElementById('loader_status_txt');
+
+    if (!loader) return;
+
+    var progress = 0;
+    var isDone = false;
+    var startTime = performance.now();
+    var duration = 850; // Total duration in ms for a super snappy experience
+
+    var statusMessages = [
+        { threshold: 0, text: 'INITIALIZING CORE MODULES...' },
+        { threshold: 30, text: 'LOADING PORTFOLIO ASSETS...' },
+        { threshold: 65, text: 'CALIBRATING INTERFACE...' },
+        { threshold: 90, text: 'SYSTEM ONLINE // ACCESS GRANTED' }
+    ];
+
+    function updateUI(val) {
+        var currentProgress = Math.min(100, Math.floor(val));
+        if (percentEl) percentEl.textContent = currentProgress + '%';
+        if (barFill) barFill.style.width = currentProgress + '%';
+        
+        if (statusTxt) {
+            var msg = statusMessages[0].text;
+            for (var i = 0; i < statusMessages.length; i++) {
+                if (currentProgress >= statusMessages[i].threshold) {
+                    msg = statusMessages[i].text;
+                }
+            }
+            if (statusTxt.textContent !== msg) statusTxt.textContent = msg;
+        }
     }
-}
 
-window.addEventListener('load', hidePreloader);
+    function dismiss() {
+        if (isDone) return;
+        isDone = true;
+        updateUI(100);
+        setTimeout(function () {
+            loader.classList.add('hidden');
+            setTimeout(function () {
+                loader.style.display = 'none';
+            }, 400);
+        }, 120);
+    }
 
-// Safety: force hide after 3 seconds no matter what
-setTimeout(hidePreloader, 3000);
+    function step(now) {
+        if (isDone) return;
+        var elapsed = now - startTime;
+        var progressRatio = Math.min(elapsed / duration, 1);
+        // Smooth easeOutQuad
+        var eased = progressRatio * (2 - progressRatio);
+        progress = eased * 100;
+        updateUI(progress);
+
+        if (progressRatio < 1) {
+            requestAnimationFrame(step);
+        } else {
+            dismiss();
+        }
+    }
+
+    requestAnimationFrame(step);
+
+    // Fast dismiss if page has already loaded
+    if (document.readyState === 'complete') {
+        dismiss();
+    } else {
+        window.addEventListener('load', function () {
+            setTimeout(dismiss, 100);
+        });
+    }
+
+    // Hard fallback: never stay longer than 1.1s
+    setTimeout(dismiss, 1100);
+})();
 
 
 
