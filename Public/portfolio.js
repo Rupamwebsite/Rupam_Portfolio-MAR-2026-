@@ -26,56 +26,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ================================================================
-   1. PRELOADER: ULTRA-SMOOTH 60FPS HARDWARE-ACCELERATED SEQUENCER
+   1. PRELOADER: LUXURY MINIMALIST ZERO-LAG SEQUENCER (120 FPS)
    ================================================================ */
 function initPreloader() {
     const loader = document.getElementById('pre_loader');
-    const percentEl = document.getElementById('loader_percent');
     const barFill = document.getElementById('loader_bar_fill');
-    const statusTxt = document.getElementById('loader_status_txt');
-
     if (!loader) return;
 
     let isDone = false;
     const startTime = performance.now();
-    const duration = 450; // Ultra-smooth 450ms
-
-    const statusMap = [
-        { t: 0, msg: 'INITIALIZING SYSTEM ENVIRONMENT...' },
-        { t: 40, msg: 'CALIBRATING NEURAL ARCHITECTURES...' },
-        { t: 75, msg: 'LOADING ASSETS & KNOWLEDGE BASES...' },
-        { t: 95, msg: 'ACCESS GRANTED // SYSTEM ONLINE' }
-    ];
-
-    let lastIdx = -1;
-
-    function updateUI(progress) {
-        const val = Math.min(100, Math.round(progress));
-        if (percentEl) percentEl.textContent = `${val}%`;
-        if (barFill) barFill.style.width = `${val}%`;
-
-        if (statusTxt) {
-            let curIdx = 0;
-            for (let i = 0; i < statusMap.length; i++) {
-                if (val >= statusMap[i].t) curIdx = i;
-            }
-            if (curIdx !== lastIdx) {
-                lastIdx = curIdx;
-                statusTxt.textContent = statusMap[curIdx].msg;
-            }
-        }
-    }
+    const duration = 280; // Ultra-snappy 280ms fluid reveal
 
     function dismiss() {
         if (isDone) return;
         isDone = true;
-        updateUI(100);
-
+        if (barFill) barFill.style.width = '100%';
         requestAnimationFrame(() => {
             loader.classList.add('hidden');
             setTimeout(() => {
                 loader.style.display = 'none';
-            }, 400);
+            }, 350);
         });
     }
 
@@ -83,9 +53,7 @@ function initPreloader() {
         if (isDone) return;
         const elapsed = now - startTime;
         const ratio = Math.min(elapsed / duration, 1);
-        // Smooth cubic-bezier ease-out
-        const eased = 1 - Math.pow(1 - ratio, 3);
-        updateUI(eased * 100);
+        if (barFill) barFill.style.width = `${Math.round(ratio * 100)}%`;
 
         if (ratio < 1) {
             requestAnimationFrame(step);
@@ -95,10 +63,8 @@ function initPreloader() {
     }
 
     requestAnimationFrame(step);
-
-    // Guaranteed fallback dismiss
-    window.addEventListener('load', () => setTimeout(dismiss, 100));
-    setTimeout(dismiss, 800);
+    window.addEventListener('load', () => setTimeout(dismiss, 50));
+    setTimeout(dismiss, 600);
 }
 
 /* ================================================================
