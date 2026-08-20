@@ -400,7 +400,9 @@ function initChatbot() {
             isStreaming = false;
             currentReader = null;
             hideStopBtn();
-            inputEl.focus();
+            if (window.innerWidth > 768) {
+                inputEl.focus();
+            }
             scrollBottom();
         }
     }
@@ -440,11 +442,13 @@ function initChatbot() {
         panel.setAttribute('aria-hidden', 'false');
         fab.classList.add('active');
         if (badge) badge.classList.add('hidden');
-        scrollBottom();
-        // On mobile, don't auto-focus (keyboard push causes layout shift)
-        if (window.innerWidth > 768) {
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('chatbot-open');
+            inputEl.blur(); // Prevent virtual keyboard from opening on mobile
+        } else {
             setTimeout(() => inputEl.focus(), 350);
         }
+        scrollBottom();
     }
 
     function closeChat() {
@@ -452,6 +456,12 @@ function initChatbot() {
         panel.classList.remove('open');
         panel.setAttribute('aria-hidden', 'true');
         fab.classList.remove('active');
+        document.body.classList.remove('chatbot-open');
+        inputEl.blur();
+        if (window.innerWidth <= 768) {
+            panel.style.height = '';
+            panel.style.top = '';
+        }
     }
 
     function clearChat() {
@@ -478,6 +488,25 @@ function initChatbot() {
     function autoResize() {
         inputEl.style.height = 'auto';
         inputEl.style.height = Math.min(inputEl.scrollHeight, 140) + 'px';
+    }
+
+    /* ---- Visual Viewport Keyboard Handling (Mobile) ---- */
+    if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', () => {
+            if (isOpen && window.innerWidth <= 768) {
+                const vh = window.visualViewport.height;
+                const topOffset = window.visualViewport.offsetTop || 0;
+                panel.style.height = `${vh}px`;
+                panel.style.top = `${topOffset}px`;
+                scrollBottom();
+            }
+        });
+        window.visualViewport.addEventListener('scroll', () => {
+            if (isOpen && window.innerWidth <= 768) {
+                const topOffset = window.visualViewport.offsetTop || 0;
+                panel.style.top = `${topOffset}px`;
+            }
+        });
     }
 
     /* ---- Event Listeners ---- */
@@ -520,6 +549,9 @@ function initChatbot() {
         const text = inputEl.value;
         inputEl.value = '';
         autoResize();
+        if (window.innerWidth <= 768) {
+            inputEl.blur(); // Dismiss keyboard on mobile after submit
+        }
         sendMessage(text);
     });
 
@@ -529,6 +561,9 @@ function initChatbot() {
             const text = inputEl.value;
             inputEl.value = '';
             autoResize();
+            if (window.innerWidth <= 768) {
+                inputEl.blur(); // Dismiss keyboard on mobile after submit
+            }
             sendMessage(text);
         }
     });
@@ -538,13 +573,20 @@ function initChatbot() {
     chips.forEach(chip => {
         chip.addEventListener('click', () => {
             const msg = chip.getAttribute('data-msg');
-            if (msg) sendMessage(msg);
+            if (msg) {
+                if (window.innerWidth <= 768) {
+                    inputEl.blur();
+                }
+                sendMessage(msg);
+            }
         });
     });
 
-    // Close on outside click
+    // Close on outside click (Desktop only)
     document.addEventListener('click', (e) => {
-        if (isOpen && !panel.contains(e.target) && !fab.contains(e.target)) closeChat();
+        if (isOpen && window.innerWidth > 768 && !panel.contains(e.target) && !fab.contains(e.target)) {
+            closeChat();
+        }
     });
 
     // Auto-open after 5s on first visit — ONLY on desktop, not mobile
