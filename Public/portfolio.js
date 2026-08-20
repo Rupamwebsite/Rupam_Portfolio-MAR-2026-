@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Defer non-critical tilt initialization to after loader exit for max smoothness
     setTimeout(() => {
         initVanillaTilt();
-    }, 500);
+    }, 5500);
 });
 
 /* ================================================================
