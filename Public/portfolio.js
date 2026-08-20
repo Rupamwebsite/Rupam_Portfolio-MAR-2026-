@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Defer non-critical tilt initialization to after loader exit for max smoothness
     setTimeout(() => {
         initVanillaTilt();
-    }, 5500);
+    }, 500);
 });
 
 /* ================================================================
@@ -37,7 +37,7 @@ function initPreloader() {
 
     let isDone = false;
     const startTime = performance.now();
-    const duration = 1300; // Satisfying 1.3s duration
+    const duration = 9300; // Satisfying 1.3s duration
 
     const statusMap = [
         { t: 0, msg: 'INITIALIZING SYSTEM...' },
