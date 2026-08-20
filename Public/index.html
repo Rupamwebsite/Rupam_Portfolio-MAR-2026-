@@ -79,62 +79,96 @@
             </div>
 
             <div class="nav-menu" id="myNavMenu">
-                <ul class="nav_menu_list">
-                    <li class="nav_list">
-                        <a href="#home" class="nav-link active-link"><i class="uil uil-estate"></i> Home</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#about" class="nav-link"><i class="uil uil-user"></i> About</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#services" class="nav-link"><i class="uil uil-layer-group"></i> Services</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#certifications" class="nav-link"><i class="uil uil-award"></i> Certifications</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#tools" class="nav-link"><i class="uil uil-wrench"></i> Tools</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#experience" class="nav-link"><i class="uil uil-briefcase-alt"></i> Experience</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#stats" class="nav-link"><i class="uil uil-chart-line"></i> Stats</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#projects" class="nav-link"><i class="uil uil-scenery"></i> Projects</a>
-                    </li>
-                    <li class="nav_list">
-                        <a href="#contact" class="nav-link"><i class="uil uil-envelope-alt"></i> Contact</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="nav-button">
-                <!-- LIVE CLOCK -->
-                <div class="nav-clock" id="navClock" title="Kolkata, India (IST)">
-                    <div class="nav-clock-header">
-                        <span class="live-dot"></span>
-                        <span class="nav-clock-time" id="navClockTime">00:00:00</span>
+                <div class="nav-drawer-header">
+                    <div class="nav-drawer-profile">
+                        <span class="nav-drawer-avatar">RM</span>
+                        <div class="nav-drawer-info">
+                            <h4>Rupam Mandal</h4>
+                            <p>IT Executive &amp; Full-Stack Dev</p>
+                        </div>
                     </div>
-                    <div class="nav-clock-date" id="navClockDate">Loading...</div>
+                    <button class="nav-drawer-close" onclick="myMenuFunction()" aria-label="Close menu">
+                        <i class="uil uil-times"></i>
+                    </button>
                 </div>
 
-                <button id="theme-toggle" class="btn theme-btn" aria-label="Toggle Theme" title="Toggle Light/Dark Theme">
-                    <i class="uil uil-moon"></i>
-                </button>
+                <ul class="nav_menu_list">
+                    <li class="nav_list">
+                        <a href="#home" class="nav-link active-link"><i class="uil uil-estate"></i> <span>Home</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#about" class="nav-link"><i class="uil uil-user"></i> <span>About</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#services" class="nav-link"><i class="uil uil-layer-group"></i> <span>Services</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#certifications" class="nav-link"><i class="uil uil-award"></i> <span>Certifications</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#tools" class="nav-link"><i class="uil uil-wrench"></i> <span>Tools</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#experience" class="nav-link"><i class="uil uil-briefcase-alt"></i> <span>Experience</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#stats" class="nav-link"><i class="uil uil-chart-line"></i> <span>Stats</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#projects" class="nav-link"><i class="uil uil-scenery"></i> <span>Projects</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                    <li class="nav_list">
+                        <a href="#contact" class="nav-link"><i class="uil uil-envelope-alt"></i> <span>Contact</span> <i class="uil uil-angle-right nav-arrow"></i></a>
+                    </li>
+                </ul>
 
-                <a href="./Rupam Mandal New exp.pdf" class="nav-cv-link" target="_blank">
-                    <button class="btn nav-download-btn">
-                        <span>CV</span>
-                        <i class="uil uil-file-alt"></i>
-                    </button>
-                </a>
+                <div class="nav-menu-mobile-footer">
+                    <div class="nav-mobile-btn-row">
+                        <a href="./Rupam Mandal New exp.pdf" class="btn secondary-btn nav-mobile-cv" target="_blank">
+                            <span>Download CV</span>
+                            <i class="uil uil-file-alt"></i>
+                        </a>
+                        <a href="#contact" class="btn blue-btn nav-mobile-hire" onclick="myMenuFunction()">
+                            <span>Hire Me</span>
+                            <i class="uil uil-arrow-right"></i>
+                        </a>
+                    </div>
+                    <div class="nav-mobile-clock">
+                        <span class="live-dot"></span>
+                        <span>Kolkata, India (IST): </span>
+                        <strong id="navClockTimeMobile">00:00:00</strong>
+                    </div>
+                </div>
             </div>
 
-            <button class="nav-menu-btn" id="mobileMenuBtn" onclick="myMenuFunction()" aria-label="Toggle menu">
-                <i class="uil uil-bars"></i>
-            </button>
+            <!-- Header Right Group (Clock, Theme, CV, Hamburger) -->
+            <div class="nav-right-group">
+                <div class="nav-button">
+                    <!-- LIVE CLOCK -->
+                    <div class="nav-clock" id="navClock" title="Kolkata, India (IST)">
+                        <div class="nav-clock-header">
+                            <span class="live-dot"></span>
+                            <span class="nav-clock-time" id="navClockTime">00:00:00</span>
+                        </div>
+                        <div class="nav-clock-date" id="navClockDate">Loading...</div>
+                    </div>
+
+                    <button id="theme-toggle" class="btn theme-btn" aria-label="Toggle Theme" title="Toggle Light/Dark Theme">
+                        <i class="uil uil-moon"></i>
+                    </button>
+
+                    <a href="./Rupam Mandal New exp.pdf" class="nav-cv-link" target="_blank">
+                        <button class="btn nav-download-btn">
+                            <span>CV</span>
+                            <i class="uil uil-file-alt"></i>
+                        </button>
+                    </a>
+                </div>
+
+                <button class="nav-menu-btn" id="mobileMenuBtn" onclick="myMenuFunction()" aria-label="Toggle menu">
+                    <i class="uil uil-bars" id="menuToggleIcon"></i>
+                </button>
+            </div>
         </nav>
 
         <!-- -------------- MAIN ---------------- -->

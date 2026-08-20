@@ -412,17 +412,43 @@ function initNavFunctions() {
     navLinks.forEach((link) => {
         link.addEventListener('click', () => {
             const menuBtn = document.getElementById('myNavMenu');
+            const toggleIcon = document.getElementById('menuToggleIcon');
             if (menuBtn && menuBtn.classList.contains('responsive')) {
                 menuBtn.classList.remove('responsive');
+                document.body.classList.remove('mobile-menu-open');
+                if (toggleIcon) toggleIcon.className = 'uil uil-bars';
             }
         });
+    });
+
+    // Close mobile menu on click outside
+    document.addEventListener('click', (e) => {
+        const menuBtn = document.getElementById('myNavMenu');
+        const toggleBtn = document.getElementById('mobileMenuBtn');
+        if (menuBtn && menuBtn.classList.contains('responsive')) {
+            if (!menuBtn.contains(e.target) && !toggleBtn.contains(e.target)) {
+                menuBtn.classList.remove('responsive');
+                document.body.classList.remove('mobile-menu-open');
+                const toggleIcon = document.getElementById('menuToggleIcon');
+                if (toggleIcon) toggleIcon.className = 'uil uil-bars';
+            }
+        }
     });
 }
 
 function myMenuFunction() {
     const menuBtn = document.getElementById('myNavMenu');
+    const toggleIcon = document.getElementById('menuToggleIcon');
     if (menuBtn) {
-        menuBtn.classList.toggle('responsive');
+        const isOpen = menuBtn.classList.toggle('responsive');
+        if (toggleIcon) {
+            toggleIcon.className = isOpen ? 'uil uil-times' : 'uil uil-bars';
+        }
+        if (isOpen) {
+            document.body.classList.add('mobile-menu-open');
+        } else {
+            document.body.classList.remove('mobile-menu-open');
+        }
     }
 }
 
@@ -533,8 +559,9 @@ function initExperienceCounter() {
    ================================================================ */
 function initLiveClock() {
     const timeEl = document.getElementById('navClockTime');
+    const timeMobileEl = document.getElementById('navClockTimeMobile');
     const dateEl = document.getElementById('navClockDate');
-    if (!timeEl || !dateEl) return;
+    if (!timeEl && !timeMobileEl) return;
 
     function tick() {
         const now = new Date();
@@ -550,11 +577,15 @@ function initLiveClock() {
         const sM = minutes.toString().padStart(2, '0');
         const sS = seconds.toString().padStart(2, '0');
 
-        timeEl.innerHTML = `${sH}:${sM}:${sS} <span style="font-size:0.7em; color:var(--c);">${ampm}</span>`;
+        const formattedTime = `${sH}:${sM}:${sS} <span style="font-size:0.7em; color:var(--c);">${ampm}</span>`;
+        if (timeEl) timeEl.innerHTML = formattedTime;
+        if (timeMobileEl) timeMobileEl.innerHTML = formattedTime;
 
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
+        if (dateEl) {
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]}`;
+        }
     }
 
     setInterval(tick, 1000);
@@ -751,7 +782,8 @@ function showNotify(message, type = 'success', timeout = 4000) {
    15. VANILLA TILT RE-INITIALIZER
    ================================================================ */
 function initVanillaTilt() {
-    if (typeof VanillaTilt !== 'undefined') {
+    // Only enable 3D tilt on devices with mouse/hover support to prevent mobile scroll interference
+    if (typeof VanillaTilt !== 'undefined' && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
         const tiltElements = document.querySelectorAll('[data-tilt]');
         VanillaTilt.init(tiltElements, {
             max: 8,
