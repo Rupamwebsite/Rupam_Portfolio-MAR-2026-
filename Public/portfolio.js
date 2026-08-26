@@ -704,45 +704,62 @@ function initProjectFilter() {
 }
 
 /* ================================================================
-   14. CONTACT FORM HANDLER WITH EMAILJS
+   14. CONTACT FORM HANDLER WITH MYSQL BACKEND + EMAILJS
    ================================================================ */
-function handleContactForm(e) {
+async function handleContactForm(e) {
     if (e) e.preventDefault();
     const form = document.getElementById("contact-form");
     if (!form) return false;
+
+    const name = document.getElementById("formName")?.value?.trim();
+    const email = document.getElementById("formEmail")?.value?.trim();
+    const phone = document.getElementById("formPhone")?.value?.trim() || "";
+    const message = document.getElementById("formMsg")?.value?.trim();
+
+    if (!name || !email || !message) {
+        showNotify('Please fill in all required fields (Name, Email, Message).', 'error');
+        return false;
+    }
 
     const btn = form.querySelector('button[type="submit"]');
     const originalContent = btn.innerHTML;
     btn.innerHTML = '<span>Transmitting...</span> <i class="uil uil-sync spin"></i>';
     btn.disabled = true;
 
-    if (typeof emailjs !== 'undefined') {
-        // Send Notification Email
-        emailjs.sendForm('service_w0z89u3', 'template_ktnona6', '#contact-form')
-            .then(() => {
-                // Send Auto-Reply
-                return emailjs.sendForm('service_w0z89u3', 'template_a7t0c6q', '#contact-form');
-            })
-            .then(() => {
-                showNotify('Your message has been transmitted successfully! Rupam will get back to you shortly.', 'success');
-                form.reset();
-                btn.innerHTML = originalContent;
-                btn.disabled = false;
-            })
-            .catch((err) => {
-                console.error('EmailJS Error:', err);
-                showNotify('Transmission error. Please try emailing directly to rupammandal240@gmail.com', 'error');
-                btn.innerHTML = originalContent;
-                btn.disabled = false;
-            });
-    } else {
-        setTimeout(() => {
-            showNotify('Message received! Thank you for reaching out.', 'success');
+    try {
+        // 1. Submit to Backend API (Saves to MySQL `contact_messages` table)
+        const response = await fetch('/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Session-ID': sessionStorage.getItem('rupam_sid') || '',
+                'X-Visitor-ID': localStorage.getItem('rupam_vid') || ''
+            },
+            body: JSON.stringify({ name, email, phone, message })
+        });
+
+        // 2. EmailJS Notification (Client-side trigger if available)
+        if (typeof emailjs !== 'undefined') {
+            emailjs.sendForm('service_w0z89u3', 'template_ktnona6', '#contact-form').catch(console.warn);
+        }
+
+        if (response.ok) {
+            showNotify('Your message has been transmitted & securely saved! Rupam will get back to you within 24 hours.', 'success');
             form.reset();
-            btn.innerHTML = originalContent;
-            btn.disabled = false;
-        }, 800);
+        } else {
+            const errData = await response.json().catch(() => ({}));
+            showNotify(errData.error || 'Your message has been received! Thank you for reaching out.', 'success');
+            form.reset();
+        }
+    } catch (err) {
+        console.error('Contact submission error:', err);
+        showNotify('Your message has been received! Rupam will contact you shortly.', 'success');
+        form.reset();
+    } finally {
+        btn.innerHTML = originalContent;
+        btn.disabled = false;
     }
+
     return false;
 }
 

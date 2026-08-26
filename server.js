@@ -4,6 +4,7 @@ const path = require("path");
 const fs = require("fs").promises;
 const https = require("https");
 const nodemailer = require("nodemailer");
+const db = require("./db");
 require("dotenv").config();
 
 const app = express();
@@ -12,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(db.auditMiddleware());
 app.use(express.static(path.join(__dirname, "Public")));
 
 // Files for local storage
@@ -303,20 +305,182 @@ app.get("/health", (req, res) => {
 
 // --- Routes ---
 
-// 1. Contact Form (Locked to local file)
+// 1. Contact Form (Saved to MySQL `contact_messages` table + local backup + audit log)
 app.post("/contact", async (req, res) => {
     try {
         const { name, email, phone, message } = req.body;
         if (!name || !email || !message) {
-            return res.status(400).send("Missing required fields");
+            return res.status(400).json({ error: "Name, email, and message are required." });
         }
-        await saveContact({ name, email, phone, message });
-        res.status(201).send("✅ Message saved successfully locally!");
+
+        const ip = db.getRealClientIp(req);
+        const ua = req.headers["user-agent"] || "";
+        const uaDetails = db.parseUserAgent(ua);
+        const country = req.headers["cf-ipcountry"] || (ip.includes("Localhost") ? "India" : null);
+        const city = ip.includes("Localhost") ? "Kolkata" : null;
+
+        // 1. Store in MySQL contact_messages table
+        const messageId = await db.saveContactMessage({
+            name,
+            email,
+            phone: phone || null,
+            message,
+            ip_address: ip,
+            country: country || "India",
+            city: city || "Kolkata",
+            user_agent: ua,
+            device_type: uaDetails.device_type,
+            browser: uaDetails.browser,
+            os: uaDetails.os
+        });
+
+        // 2. Backup to local JSON file
+        const newContact = await saveContact({ id: messageId, name, email, phone, message, ip_address: ip });
+
+        // 3. Log Audit Change
+        await db.logAuditChange({
+            req,
+            userName: name,
+            action: 'SUBMIT_DIRECT_MESSAGE',
+            entityType: 'CONTACT_MESSAGE',
+            entityId: messageId,
+            newValues: { id: messageId, name, email, phone, message },
+            metadata: {
+                source: 'Portfolio Send a Direct Message Form',
+                email: email,
+                phone: phone || null
+            }
+        });
+
+        // 4. Trigger Email Notification in Background (if configured)
+        sendEmailNotification({ name, email, phone, message }).catch(console.error);
+
+        res.status(201).json({
+            success: true,
+            message: "✅ Message received and saved successfully to database!",
+            messageId: messageId
+        });
     } catch (err) {
-        console.error("❌ Save error:", err);
-        res.status(500).send("Server Error");
+        console.error("❌ Contact save error:", err);
+        res.status(500).json({ error: "Failed to process message." });
     }
 });
+
+// Admin Contact Messages API
+app.get("/api/admin/contacts", async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit || "50", 10);
+        const offset = parseInt(req.query.offset || "0", 10);
+        const status = req.query.status || null;
+        const search = req.query.search || null;
+
+        const data = await db.getContactMessages({ limit, offset, status, search });
+        res.json(data);
+    } catch (err) {
+        console.error("❌ Failed to fetch contact messages:", err);
+        res.status(500).json({ error: "Failed to fetch messages" });
+    }
+});
+
+// Admin Update Contact Message Status API
+app.patch("/api/admin/contacts/:id/status", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { status } = req.body;
+        if (!['NEW', 'READ', 'REPLIED', 'ARCHIVED'].includes(status)) {
+            return res.status(400).json({ error: "Invalid status value." });
+        }
+
+        const success = await db.updateContactStatus(id, status);
+        res.json({ success });
+    } catch (err) {
+        console.error("❌ Failed to update contact status:", err);
+        res.status(500).json({ error: "Failed to update status" });
+    }
+});
+
+
+// Admin Audit Log API
+app.get("/api/admin/audit-logs", async (req, res) => {
+    try {
+        const limit = parseInt(req.query.limit || "50", 10);
+        const offset = parseInt(req.query.offset || "0", 10);
+        const eventType = req.query.eventType || null;
+        const ipAddress = req.query.ipAddress || null;
+        const action = req.query.action || null;
+        const search = req.query.search || null;
+
+        const data = await db.getVisitLogs({ limit, offset, eventType, ipAddress, action, search });
+        res.json(data);
+    } catch (err) {
+        console.error("❌ Failed to fetch audit logs:", err);
+        res.status(500).json({ error: "Failed to fetch audit logs" });
+    }
+});
+
+// Admin Visit & Telemetry Stats API
+app.get("/api/admin/visit-stats", async (req, res) => {
+    try {
+        const stats = await db.getVisitStats();
+        res.json(stats);
+    } catch (err) {
+        console.error("❌ Failed to fetch stats:", err);
+        res.status(500).json({ error: "Failed to fetch visit stats" });
+    }
+});
+
+// Client Telemetry & Visitor Interaction Logger
+app.post("/api/telemetry/event", async (req, res) => {
+    try {
+        const {
+            session_id,
+            visitor_id,
+            screen_resolution,
+            action,
+            event_type,
+            page_url,
+            referrer,
+            entity_type,
+            entity_id,
+            metadata
+        } = req.body || {};
+
+        const ip = db.getRealClientIp(req);
+        const ua = req.headers["user-agent"] || "";
+        const uaDetails = db.parseUserAgent(ua);
+
+        await db.logVisit({
+            session_id: session_id || null,
+            visitor_id: visitor_id || null,
+            ip_address: ip,
+            country: req.headers["cf-ipcountry"] || (ip.includes("Localhost") ? "India" : null),
+            city: ip.includes("Localhost") ? "Kolkata" : null,
+            user_agent: ua,
+            browser: uaDetails.browser,
+            browser_version: uaDetails.browser_version,
+            os: uaDetails.os,
+            os_version: uaDetails.os_version,
+            device_type: uaDetails.device_type,
+            screen_resolution: screen_resolution || null,
+            is_bot: uaDetails.is_bot,
+            http_method: "POST",
+            page_url: page_url || "/",
+            referrer: referrer || null,
+            status_code: 200,
+            event_type: event_type || "PAGE_VIEW",
+            action: action || "CLIENT_INTERACTION",
+            entity_type: entity_type || null,
+            entity_id: entity_id || null,
+            metadata: metadata || null
+        });
+
+        res.json({ success: true });
+    } catch (e) {
+        console.error("Telemetry event error:", e);
+        res.status(500).json({ error: "Failed to record event" });
+    }
+});
+
 
 // 2. Get All Projects (From projects.json)
 app.get("/api/projects", async (req, res) => {
@@ -501,10 +665,15 @@ app.post("/api/chat/stream", async (req, res) => {
 
 // Start Server
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`🚀 Server running on port ${PORT}`);
     console.log(`📍 Mode: Local JSON Data + Apex Neural Intelligence`);
-    console.log(`🔗 Projects API: GET http://localhost:${PORT}/api/projects`);
-    console.log(`🤖 Chatbot API: POST http://localhost:${PORT}/api/chat`);
-    console.log(`⚡ Stream API:   POST http://localhost:${PORT}/api/chat/stream`);
+    console.log(`🔗 Projects API:    GET  http://localhost:${PORT}/api/projects`);
+    console.log(`🤖 Chatbot API:     POST http://localhost:${PORT}/api/chat`);
+    console.log(`⚡ Stream API:      POST http://localhost:${PORT}/api/chat/stream`);
+    console.log(`📊 Audit Logs API:  GET  http://localhost:${PORT}/api/admin/audit-logs`);
+    console.log(`📈 Visit Stats API: GET  http://localhost:${PORT}/api/admin/visit-stats`);
+
+    // Initialize database tables on server launch
+    await db.initDatabase();
 });
